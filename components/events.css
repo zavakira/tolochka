@@ -185,7 +185,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: var(--gradient-card-overlay);
+  
   pointer-events: none;
 }
 

@@ -164,14 +164,14 @@
   width:      100%;
   height:     100%;
   object-fit: cover;
-  filter:     var(--blur-card);
+  
 }
 
 /* Shadow gradient overlay (fill_OXNE8O) + drop-shadow */
 .toloka-event-card__shadow {
   position:         absolute;
   inset:            0;
-  background-image: var(--gradient-card-overlay);
+
   box-shadow:       var(--shadow-image);
 }
 

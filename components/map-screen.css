@@ -45,7 +45,7 @@
   position: relative;
   width:    100%;
   height:   26.5625rem;  /* 425px — Figma layout_6TNN7A exact */
-  overflow: hidden;
+  
 }
 
 .map-content__img {

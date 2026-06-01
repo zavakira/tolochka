@@ -131,11 +131,7 @@
           <!-- Figma node 1593:16725 — 56×56 outlined button, opens Про нас screen -->
           <a class="about-icon-btn js-open-about" href="#"
              aria-label="Перейти до сторінки Про нас">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor"
-                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                 aria-hidden="true">
-              <path d="M4 10h12M10 4l6 6-6 6"/>
-            </svg>
+            <img src="assets/images/icons/icon-arrow-right.svg">
           </a>
         </div>
 
@@ -298,7 +294,7 @@
         <!-- Background image — Figma node 1669:13251
              Cropped export (x-offset 8.98%, x-scale 80.8%) → 335×546px, no overflow needed -->
         <div class="event-card__bg" aria-hidden="true">
-          <img src="assets/images/events/event-card-park-2.svg"
+          <img src="assets/images/events/event-card-main.png"
                alt="" width="335" height="546" />
         </div>
 
@@ -667,7 +663,7 @@
 
       <!-- FAQ image -->
       <div class="faq-image">
-        <img src="assets/images/faq/faq-image.png"
+        <img src="assets/images/faq/faq-image.svg"
              alt="Учасники еко-толоки збирають сміття в парку"
              width="317" height="315" />
       </div>
@@ -3309,13 +3305,8 @@
           <!-- Frame 858 (Figma layout_DKUFYX) — icon + number grouped together -->
           <div class="profile-stat-inner">
             <!-- Plant icon (componentId 1156:25604) -->
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M16 28V18C16 14 19 10 24 8C26 7 28 7 28 7C28 7 28 9 27 11C25 15 21 17 16 18"
-                    stroke="#0D0E0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 28V22C16 18 13 14 8 12C6 11 4 11 4 11C4 11 4 13 5 15C7 19 11 21 16 22"
-                    stroke="#0D0E0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <img src="assets/images/icons/Plant.svg">
+          
             <span class="profile-stat-number">13</span>
           </div>
           <span class="profile-stat-label">відвіданих толок</span>
@@ -3326,15 +3317,7 @@
           <!-- Frame 858 — icon + number grouped together -->
           <div class="profile-stat-inner">
             <!-- HandsClapping icon (componentId 1156:25477) -->
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M12 6L14 4L20 10M20 10L18 12M20 10L24 6L26 8L22 12"
-                    stroke="#0D0E0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M10 14L8 12L6 14L14 22C16 24 19 25 22 24L26 20C27 18 27 16 25 14L20 12L18 14"
-                    stroke="#0D0E0F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M10 14L14 18" stroke="#0D0E0F" stroke-width="1.5"
-                    stroke-linecap="round"/>
-            </svg>
+            <img src="assets/images/icons/HandsClapping.svg">
             <span class="profile-stat-number">5/50</span>
           </div>
           <span class="profile-stat-label">отриманих<br>ачівок</span>
@@ -3575,10 +3558,8 @@
           Оберіть район
         </button>
         <button class="toloka-toolbar-btn" type="button" aria-label="Карта">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-               xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M17.8844 3.88212C17.8095 3.82378 17.7223 3.78326 17.6295 3.76364C17.5366 3.74401 17.4405 3.74579 17.3484 3.76884L12.5727 4.96259L7.77969 2.56571C7.64614 2.4991 7.49317 2.48248 7.34844 2.51884L2.34844 3.76884C2.21323 3.80264 2.09319 3.88066 2.00741 3.9905C1.92163 4.10035 1.87502 4.23572 1.875 4.37509V15.6251C1.87501 15.7201 1.89667 15.8138 1.93833 15.8991C1.97998 15.9845 2.04054 16.0592 2.1154 16.1176C2.19025 16.1761 2.27745 16.2167 2.37035 16.2364C2.46326 16.2561 2.55943 16.2544 2.65156 16.2313L7.42734 15.0376L12.2203 17.4345C12.3073 17.4774 12.403 17.4998 12.5 17.5001C12.5511 17.5001 12.602 17.4938 12.6516 17.4813L17.6516 16.2313C17.7868 16.1975 17.9068 16.1195 17.9926 16.0097C18.0784 15.8998 18.125 15.7645 18.125 15.6251V4.37509C18.125 4.28003 18.1034 4.18622 18.0617 4.10079C18.02 4.01537 17.9593 3.94058 17.8844 3.88212ZM8.125 4.13602L11.875 6.01102V15.8641L8.125 13.9891V4.13602ZM3.125 4.86337L6.875 3.92587V13.8868L3.125 14.8243V4.86337ZM16.875 15.1368L13.125 16.0743V6.11337L16.875 5.17587V15.1368Z" fill="#0E0F10"/>
-          </svg>
+          <img src="assets/images/icons/icon-map-btn.svg" alt="" aria-hidden="true" width="20" height="18">
+        </button>
         </button>
       </div>
 

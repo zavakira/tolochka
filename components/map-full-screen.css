@@ -97,7 +97,7 @@
 /* Dropdown wrapper — position:relative so panel can be absolute */
 .map-full-toolbar__district-wrap {
   position: relative;
-  flex:     1;
+  min-width: 0;
 }
 
 /* District dropdown trigger (Figma 1678:5811)
@@ -108,7 +108,7 @@
   display:          flex;
   align-items:      center;
   justify-content:  center;
-  width:            100%;
+  width:            auto;
   border-radius:    var(--radius-btn-toolbar);     /* 32px → pill           */
   border:           none;
   box-shadow:       0 0 0 1.5px var(--color-text); /* 1.5px stroke, no layout impact */
@@ -122,7 +122,24 @@
   text-transform:   none;
   background-color: var(--color-white);
   cursor:           pointer;
+  min-width: 0;
+  max-width: 100%;
+  overflow:  hidden;
+
 }
+#maps-district-label {
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+  min-width:     0;
+}
+#map-full-district-label {
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+  min-width:     0;
+}
+
 .map-full-toolbar__dropdown:hover,
 .map-full-toolbar__dropdown:active,
 .map-full-toolbar__dropdown:focus,
@@ -289,19 +306,23 @@
 
 /* "толочити" CTA — full width · #7A2EEF bg · white text */
 .map-full-event__btn-join {
-  flex:             1;
-  background-color: var(--color-purple-dark);   /* #7A2EEF               */
-  color:            var(--color-white);
-  padding:          var(--space-4) var(--space-20); /* 16px 80px          */
-  border-radius:    var(--radius-pill);
+  width:            100%;
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  background-color: var(--color-purple-dark);    /* #7A2EEF */
+  border:           1.5px solid var(--color-purple-dark);
+  border-radius:    var(--radius-btn-toolbar);   /* 32px */
+  padding-block:    var(--space-4);              /* 16px */
+  padding-inline:   0;
+  font-size:        var(--text-base);            /* 16px */
+  font-weight:      var(--font-weight-semibold);
   font-family:      var(--font-body);
-  font-size:        var(--text-base);           /* 16px                   */
-  font-weight:      var(--font-weight-semibold); /* 600                   */
-  line-height:      var(--line-height-label);   /* 100%                   */
-  text-transform:   lowercase;
-  border:           none;
+  line-height:      var(--line-height-label);
+  text-transform:   uppercase;
+  letter-spacing:   var(--letter-spacing-normal);
+  color:            var(--color-white);
   cursor:           pointer;
-  transition:       background-color var(--transition-fast);
 }
 .map-full-event__btn-join:hover {
   background-color: var(--color-purple-accent); /* #9251FB                */

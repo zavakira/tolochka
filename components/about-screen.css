@@ -33,10 +33,10 @@
    Figma layout_Q2UNN6: fixed height 720px
    Children are absolutely positioned inside.                  */
 .about-hero {
-  position: relative;
+  position: absolute;
   width:    100%;
   height:   45rem;                         /* 720px */
-  overflow: hidden;
+  
 }
 
 /* Slider wrapper (layout_DBRV1P: absolute, 375×720, x:0 y:0) */
@@ -130,6 +130,7 @@
   align-self:      stretch;
   gap:             var(--space-10);      /* 40px */
   padding:         var(--space-30) var(--space-5); /* 120px 20px — Figma layout_1PEG64 */
+  padding-top: 700px;
 }
 
 /* Objective subsection (layout_8SVI32: column, center, stretch, gap: 28px) */
@@ -309,7 +310,7 @@
   align-items:     center;
   align-self:      stretch;
   padding:         var(--space-30) 0;     /* 120px 0 — Figma layout_D2I0SR */
-  overflow:        hidden;
+  
 }
 
 /* Background container (layout_RYMN3E: absolute, y=61, 375×384) */
