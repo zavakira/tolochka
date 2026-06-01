@@ -1,0 +1,329 @@
+/* ============================================================
+   Component: Upcoming Events Section
+   Figma node 1261:4760 — Upcoming Events
+   Layout: column · center · padding 60px 20px · gap 20px
+   ============================================================ */
+
+.events {
+  scroll-margin-top: var(--header-height);         /* 88px — offset for sticky header on anchor jump */
+  padding: var(--space-15) var(--space-5);         /* 60px 20px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);                             /* 20px */
+  background-color: var(--color-bg);
+  max-width: var(--viewport-mobile);
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* ── Section header ──────────────────────────────────────────
+   Figma node 1261:4761 — Section Header
+   column · center · gap 20px                                 */
+.events-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);                             /* 20px */
+  width: 100%;
+}
+
+/* Section title
+   Figma node 1261:4762
+   Unbounded · Regular 400 · 20px · UPPER · center · #0D0E0F */
+.events-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);                       /* 20px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-text);
+}
+
+/* ── Toolbar ─────────────────────────────────────────────────
+   Figma node 1261:4763 — Toolbar Container
+   row · space-between · center · full width                  */
+.events-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Icon-only outline pill button — 48px circle
+   Figma: Filter Button                                       */
+.btn--icon {
+  width: var(--size-icon-btn);                     /* 48px */
+  height: var(--size-icon-btn);                    /* 48px */
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.btn--icon img {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* ── Toolbar pill buttons: filter + map ─────────────────────
+   Figma component 1579:14908 — State-layer (icon-only)
+   state=Default · size=small
+   Padding: 8px 16px · border-radius: 32px · stroke 1.5px #000
+   Icon: 20×20px (layout_H7UHYO)
+   States — inherited from .btn--outline (header.css):
+     hover   → rgba(13,14,15, 0.10) background  (--state-hover)
+     active  → rgba(13,14,15, 0.20) background  (--state-pressed)
+     focused → rgba(13,14,15, 0.05) background  (--state-focused)
+     disabled → #CDD2D4 bg · #A9B2B7 border     (--color-disabled-*)
+   Transition: 150ms ease on background-color / border-color (--transition-fast)
+   ─────────────────────────────────────────────────────────── */
+.btn--filter,
+.btn--map {
+  height:        var(--size-btn-small);            /* 36px */
+  width:         auto;                             /* hug — icon + padding */
+  border-radius: var(--radius-btn-toolbar);        /* 32px — Figma 1579:14908 */
+  padding:       var(--space-2) var(--space-4);    /* 8px 16px */
+  gap:           var(--space-2);                   /* 8px */
+  flex-shrink:   0;
+}
+
+.btn--filter img,
+.btn--map img {
+  width:   1.25rem;                                /* 20px — Figma layout_H7UHYO */
+  height:  1.25rem;                                /* 20px */
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Dropdown button — icon + label · 36px height
+   Figma component 1579:14699 — State-layer (icon + label)
+   state=enable · size=small
+   Padding: 8px 16px · gap: 8px · border-radius: 32px · stroke 1.5px #0D0E0F
+   Icon: 20×20px (layout_EYVCPG) · Text: Manrope SemiBold 14px / 100% lh
+   States — inherited from .btn--outline (header.css):
+     hover   → rgba(13,14,15, 0.10) background  (--state-hover)
+     active  → rgba(13,14,15, 0.20) background  (--state-pressed)
+     focused → rgba(13,14,15, 0.05) background  (--state-focused)
+     disabled → #CDD2D4 bg · #A9B2B7 border/text (--color-disabled-*)
+   Transition: 150ms ease on background-color / border-color (--transition-fast) */
+
+/* Wrapper — position:relative anchors the dropdown panel */
+.events-dropdown-wrap {
+  position: relative;
+}
+
+/* Dropdown panel in events context — absolute popup, zero layout impact.
+   .map-dropdown has no position:absolute by default (it relies on its
+   containing .map-toolbar-wrap being absolute in the map screen).
+   Here we scope it so the panel floats over content below.             */
+.events-dropdown-wrap .map-dropdown {
+  position: absolute;
+  top:      calc(100% + var(--space-1));  /* 4px gap below button */
+  left:     0;
+  z-index:  var(--z-raised);             /* above event cards     */
+}
+
+.events-dropdown {
+  height:          var(--size-btn-small);          /* 36px */
+  border-radius:   var(--radius-btn-toolbar);      /* 32px — Figma 1579:14699 */
+  padding:         var(--space-2) var(--space-4);  /* 8px 16px */
+  gap:             var(--space-2);                 /* 8px */
+  font-size:       var(--text-sm);                 /* 14px — label-sm */
+  font-weight:     var(--font-weight-semibold);    /* 600 */
+  font-family:     var(--font-body);               /* Manrope */
+  line-height:     var(--line-height-label);       /* 100% */
+  color:           var(--color-text);              /* #0D0E0F */
+  text-transform:  none;                           /* override .btn uppercase — Figma label-sm has no textCase */
+}
+
+.events-dropdown img {
+  width:   1.25rem;                                /* 20px — Figma layout_EYVCPG */
+  height:  1.25rem;                                /* 20px */
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ── Event card ──────────────────────────────────────────────
+   Figma node 1256:15152 — Event Card
+   335×546px · radius 40px · padding 20px
+   column · space-between · overflow hidden                   */
+.event-card {
+  position: relative;
+  width: 100%;
+  height: 34.125rem;                               /* 546px */
+  border-radius: var(--radius-card);               /* 40px */
+  padding: var(--space-5);                         /* 20px */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+/* Background image container — absolutely fills card
+   Figma node 1669:13251 — image rect direct child, position (0,0), 335×546px
+   Image is pre-cropped by Figma export (scaleMode STRETCH + crop transform)
+   so it fills the card exactly — no overflow or offset needed              */
+.event-card__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--color-black);            /* fallback while image loads */
+}
+
+.event-card__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                               /* Figma: scaleMode STRETCH, cropped to card */
+  display: block;
+}
+
+/* Gradient overlay — applied on top of image, under content
+   Uses --gradient-card-overlay token: grays top 0–20% and bottom 59–75%.
+   z-index: 1 sits above img (z-index: auto) inside .event-card__bg context. */
+.event-card__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--gradient-card-overlay);
+  pointer-events: none;
+}
+
+/* All content sits above overlay */
+.event-card__top,
+.event-card__info {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Badge row ───────────────────────────────────────────────
+   Figma node I1256:15152;1385:4408 — BadgesContainer
+   row · wrap · gap 6px                                       */
+.event-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1-5);                           /* 6px */
+}
+
+/* Single badge pill
+   Figma: white bg · radius 20px · padding 4px 10px · gap 6px */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;                                   /* 6px */
+  padding: var(--space-1) var(--space-2-5);        /* 4px 10px */
+  background-color: var(--color-white);
+  border-radius: var(--radius-badge);              /* 20px */
+  flex-shrink: 0;
+}
+
+.badge img {
+  width: 1rem;                                     /* 16px */
+  height: 1rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Badge text
+   Figma: Manrope SemiBold 600 · 14px · 18px lh · #9251FB    */
+.badge__text {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);                       /* 14px */
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-card);            /* 18px */
+  color: var(--color-purple-accent);               /* #9251FB */
+}
+
+/* Status badge — purple bg · white text
+   Figma node I1256:15152;1385:4480 — Badge Status (#9251FB) */
+.badge--status {
+  background-color: var(--color-purple-accent);
+}
+
+.badge--status .badge__text {
+  color: var(--color-white);
+}
+
+/* ── Event info block ────────────────────────────────────────
+   Figma node I1256:15152;1385:4418 — Event Info
+   column · gap 24px · backdrop-filter blur(3.5px)            */
+.event-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);                             /* 24px */
+  backdrop-filter: var(--blur-info);               /* blur(3.5px) */
+}
+
+/* Event title
+   Figma node I1256:15152;1385:4419
+   Manrope Bold 700 · 24px · 120% lh · white                 */
+.event-card__title {
+  font-family: var(--font-body);
+  font-size: var(--text-2xl);                      /* 24px */
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);           /* 120% */
+  color: var(--color-white);
+}
+
+/* Location row
+   Figma node I1256:15152;1385:4420 — Location Block
+   row · center · gap 12px                                    */
+.event-card__location {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);                             /* 12px */
+}
+
+.event-card__location img {
+  width: 1.25rem;                                  /* 20px */
+  height: 1.5rem;                                  /* 24px */
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Location text
+   Figma node I1256:15152;1385:4422
+   Manrope Bold 700 · 16px · 20px lh · white                 */
+.event-card__location-text {
+  font-family: var(--font-body);
+  font-size: var(--text-base);                     /* 16px */
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-snug);            /* 1.25 = 20px on 16px base */
+  color: var(--color-white);
+}
+
+/* CTA button — full width · reuses .btn.btn--primary
+   Figma node I1256:15152;1593:13737 — border-radius 32px (not pill) */
+.event-card__info .btn--primary {
+  width: 100%;
+  padding-block: var(--space-4);                   /* 16px */
+  padding-inline: var(--space-20);                 /* 80px */
+  border-radius: var(--radius-btn-event);          /* 32px */
+}
+
+/* ── Pagination ──────────────────────────────────────────────
+   Figma node 1261:4769 — Pagination Container
+   row · center · gap 10px                                    */
+.events-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);                           /* 10px */
+}
+
+/* Dot base — 8×8px · radius 19px */
+.pagination-dot {
+  height: 0.5rem;                                  /* 8px */
+  width: 0.5rem;
+  border-radius: var(--radius-pagination);         /* 19px */
+  background-color: var(--color-pagination-inactive);
+  transition: width var(--transition-fast),
+              background-color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+/* Active dot — 30×8px · #BBB1FF
+   Figma node 1261:4770                                       */
+.pagination-dot--active {
+  width: 1.875rem;                                 /* 30px */
+  background-color: var(--color-purple-pagination);
+}

@@ -1,0 +1,992 @@
+/* ============================================================
+   Component: Map Screen Overlay
+   Figma node 1092:14419 — Мапа толок (вибрана толока) 375
+   Lives inside #screen-container (position:fixed;inset:0).
+   Hidden with display:none by default; display:block when active.
+   Trigger: #btn-join → .map-screen--open (transition.js)
+   ============================================================ */
+
+/* ── Overlay panel ───────────────────────────────────────────
+   position:absolute within the fixed #screen-container.
+   Centred to --viewport-mobile (375 px); fills full height.
+   No transform, no transition — switch is instant.           */
+.map-screen {
+  display:    none;
+  position:   absolute;
+  top:        0;
+  bottom:     0;
+  /* Centre the 375 px panel inside the full-viewport container */
+  left:       max(0px, calc(50% - (var(--viewport-mobile) / 2)));
+  width:      min(var(--viewport-mobile), 100%);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: var(--color-bg);
+  -webkit-overflow-scrolling: touch;
+}
+
+/* flex column matches body layout context — .site-header is a flex item
+   in all four screens, ensuring identical rendering.
+   overflow-x and scrollbar-gutter removed: overflow-x:hidden blocks
+   position:sticky in some browsers; scrollbar-gutter creates width
+   asymmetry vs the body (which has no gutter reservation). */
+.map-screen--open {
+  display:        flex;
+  flex-direction: column;
+}
+
+/* ── Back/close button (replaces burger in map screen header)
+   Figma node 1593:14354 — same pill shape as .btn--menu
+   but contains a ← chevron instead of the hamburger icon     */
+
+/* ── Map content area ────────────────────────────────────────
+   Figma node 1092:14519 — Content frame
+   layout_6TNN7A: fill × 425px fixed height                   */
+.map-content {
+  position: relative;
+  width:    100%;
+  height:   26.5625rem;  /* 425px — Figma layout_6TNN7A exact */
+  overflow: hidden;
+}
+
+.map-content__img {
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+  display:    block;
+}
+
+/* ── Filter toolbar + dropdown wrapper ───────────────────────
+   Figma Container — layout_OWLZAF: column · center · gap 8px
+   Absolutely positioned at y:112 from page top (= 24px inside
+   .map-content, since header is 88px).                       */
+.map-toolbar-wrap {
+  position: absolute;
+  top:      0.625rem;                    /* 10px — Figma Content padding-top (layout_KNU5C0) */
+  left:     0;
+  right:    0;
+  z-index:  var(--z-raised);            /* 10 — above map image */
+  display:  flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-2);        /* 8px — Figma layout_OWLZAF gap */
+}
+
+/* Toolbar row — Figma Filter Menu layout_FY299N
+   Row · gap 4px · padding 0 20px · 374px wide               */
+.map-toolbar {
+  display:        flex;
+  gap:            var(--space-1);        /* 4px */
+  padding-inline: var(--space-5);        /* 20px */
+  align-items:    center;
+  width:          100%;
+}
+
+/* Icon-only filter buttons (left / right ends of toolbar)
+   Figma 1591:13577 — white bg · 1.5px stroke · pad 12px 24px · r 32px */
+.map-toolbar__btn {
+  height:           var(--size-btn-small);         /* 36px */
+  width:            auto;
+  border-radius:    var(--radius-btn-toolbar);     /* 32px */
+  padding:          var(--space-3) var(--space-6); /* 12px 24px */
+  flex-shrink:      0;
+  background-color: var(--color-white);
+}
+.map-toolbar__btn img,
+.map-toolbar__btn svg {
+  width:   auto;    /* natural SVG viewBox width via HTML attrs  */
+  height:  auto;    /* filter: 20×18 · calendar: 18×20          */
+  display: block;
+}
+
+/* District dropdown button (centre of toolbar)
+   Figma layout_CG7UN0: row · fill · r 32px · pad 12px 24px · gap 8px · stroke 1.5px */
+.map-toolbar__dropdown {
+  flex:             1;
+  border-radius:    var(--radius-btn-toolbar);      /* 32px */
+  padding:          var(--space-3) var(--space-6);  /* 12px 24px — Figma layout_CG7UN0 */
+  gap:              var(--space-2);                 /* 8px */
+  font-size:        var(--text-base);               /* 16px */
+  font-weight:      var(--font-weight-semibold);
+  font-family:      var(--font-body);
+  line-height:      var(--line-height-label);
+  color:            var(--color-text);
+  text-transform:   none;
+  background-color: var(--color-white);
+}
+/* Lock background to white on all interaction states —
+   overrides .btn--outline :active / :focus-visible tints   */
+.map-toolbar__dropdown:hover,
+.map-toolbar__dropdown:active,
+.map-toolbar__dropdown:focus,
+.map-toolbar__dropdown:focus-visible {
+  background-color: var(--color-white);
+  outline: none;
+}
+
+.map-toolbar__dropdown img,
+.map-toolbar__dropdown svg {
+  width:       auto;   /* natural SVG viewBox — dropdown caret: 17×17 */
+  height:      auto;
+  display:     block;
+  flex-shrink: 0;
+}
+
+/* ── Event Info panel ────────────────────────────────────────
+   Figma node 1256:15408 — layout_KV4UJS
+   White · rounded top corners 20px · column · no own padding
+   (each child section carries its own padding)               */
+.map-event-info {
+  background-color: var(--color-white);
+  border-radius:    var(--radius-badge) var(--radius-badge) 0 0;  /* 20px 20px 0 0 */
+  display:          flex;
+  flex-direction:   column;
+  align-items:      stretch;
+  max-width:        var(--viewport-mobile);
+  margin-inline:    auto;
+  width:            100%;
+}
+
+/* ── District dropdown panel ─────────────────────────────────
+   Figma Dropdown Menu — layout_G5IP4J: 178px fixed width
+   White bg · 1px #0D0E0F border · border-radius 20px
+   Shadow: 0 4px 8px rgba(0,0,0,0.15) — effect_QC9D97        */
+.map-dropdown {
+  width:            11.125rem;             /* 178px — Figma exact */
+  background-color: var(--color-white);
+  border:           1px solid var(--color-text);   /* #0D0E0F */
+  border-radius:    var(--radius-badge);            /* 20px */
+  box-shadow:       var(--shadow-dropdown);
+  padding:          var(--space-3) var(--space-5);  /* 12px 20px */
+  display:          none;                           /* hidden by default */
+  flex-direction:   row;
+  gap:              var(--space-2);                 /* 8px — between list and scrollbar */
+  overflow:         hidden;
+  transform-origin: top center;                     /* expand/collapse from top */
+}
+
+/* ── Open state: expand animation ─────────────────────────── */
+.map-dropdown--open {
+  display:   flex;
+  animation: dropdown-expand 220ms ease-out forwards;
+}
+
+/* ── Closing state: collapse animation (JS removes class after) */
+.map-dropdown--closing {
+  display:   flex;
+  animation: dropdown-collapse 180ms ease-in forwards;
+}
+
+@keyframes dropdown-expand {
+  from {
+    opacity:   0;
+    transform: translateY(-6px) scaleY(0.88);
+  }
+  to {
+    opacity:   1;
+    transform: translateY(0)    scaleY(1);
+  }
+}
+
+@keyframes dropdown-collapse {
+  from {
+    opacity:   1;
+    transform: translateY(0)    scaleY(1);
+  }
+  to {
+    opacity:   0;
+    transform: translateY(-6px) scaleY(0.88);
+  }
+}
+
+/* Options list — Figma layout_T8GTTR: column · stretch · gap 16px */
+.map-dropdown__list {
+  flex:           1;
+  list-style:     none;
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-4);   /* 16px */
+}
+
+/* Option button — Figma body-question mobile: Manrope Medium 500 · 12px · #404040 */
+.map-dropdown__option {
+  font-family:  var(--font-body);
+  font-size:    var(--text-xs);             /* 12px */
+  font-weight:  var(--font-weight-medium);  /* 500 */
+  color:        var(--color-false-black);   /* #404040 */
+  background:   transparent;
+  border:       none;
+  padding:      0;
+  cursor:       pointer;
+  text-align:   left;
+  line-height:  var(--line-height-tight);   /* 120% */
+  transition:   color var(--transition-fast);
+}
+.map-dropdown__option:hover {
+  color: var(--color-purple-primary);       /* #A978FF */
+}
+
+/* Decorative scrollbar — Figma layout_MLAMKG: 4×40px · r 2px · Light Gray */
+.map-dropdown__scrollbar {
+  width:            0.25rem;      /* 4px */
+  height:           2.5rem;       /* 40px */
+  border-radius:    0.125rem;     /* 2px */
+  background-color: var(--color-gray-light);   /* #D7D7D7 ≈ Light Gray */
+  align-self:       flex-start;
+  flex-shrink:      0;
+}
+
+
+/* ── Event Header ────────────────────────────────────────────
+   Figma node 1092:14518 — layout_X6G71O
+   Column · center · gap 28px · padding 20px                  */
+.map-event-header {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            1.75rem;            /* 28px — layout_X6G71O */
+  padding:        var(--space-5);     /* 20px */
+}
+
+/* Sheet drag-handle pill — Figma Event Subtitle
+   layout_NDO67K: 60×8px fixed · background #BBB1FF           */
+.map-sheet-handle {
+  width:            3.75rem;                         /* 60px */
+  height:           0.5rem;                          /* 8px */
+  border-radius:    var(--radius-pagination);        /* 19px → fully rounded */
+  background-color: var(--color-purple-pagination);  /* #BBB1FF */
+  flex-shrink:      0;
+}
+
+/* Badges container
+   Figma layout_Y7OCL2: row · gap 10px · 335px wide           */
+.map-badges {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-2-5);   /* 10px */
+  align-self:  stretch;
+}
+
+/* Badge "Заплановано" — transparent bg · vivid-purple stroke
+   Figma 1669:13544: fill transparent · stroke #8A38F5 · pad 4px 10px · gap 6px */
+.badge--map-transparent {
+  background-color: transparent;
+  border:           1px solid var(--color-purple-vivid);  /* #8A38F5 */
+}
+.badge--map-transparent .badge__text {
+  color:       var(--color-purple-accent);  /* #9251FB — fill_25XTTX */
+  font-size:   var(--text-xs);              /* 12px — style_DDQBWM */
+  line-height: var(--line-height-normal);   /* 1.5 → 18px on 12px  */
+}
+/* Alarm icon — layout_8JKGLI: 18px wide × fill height
+   Overrides base .badge img (16×16) from events.css             */
+.badge--map-transparent img {
+  width:  1.125rem;   /* 18px */
+  height: auto;
+}
+
+/* Badge "1328" — white bg · vivid-purple stroke + text
+   Figma 1669:13548: fill white · stroke #8A38F5                 */
+.badge--map-white {
+  background-color: var(--color-white);
+  border:           1px solid var(--color-purple-vivid);  /* #8A38F5 */
+}
+.badge--map-white .badge__text {
+  color:       var(--color-purple-vivid);  /* #8A38F5 — fill_D6X9Z5 */
+  font-size:   var(--text-xs);             /* 12px — style_DDQBWM */
+  line-height: var(--line-height-normal);  /* 1.5 → 18px on 12px  */
+}
+/* Number icon — layout_SY5N0Y: 14×14px fixed
+   Overrides base .badge img (16×16) from events.css             */
+.badge--map-white img {
+  width:  0.875rem;   /* 14px */
+  height: 0.875rem;
+}
+
+/* Event title
+   Mobile/Headings/h1 mobile: Unbounded Regular 400 · 20px · UPPERCASE */
+.map-event-title {
+  font-family:    var(--font-heading);
+  font-size:      var(--text-xl);             /* 20px */
+  font-weight:    var(--font-weight-regular);
+  line-height:    var(--line-height-tight);   /* 120% */
+  text-transform: uppercase;
+  color:          var(--color-text);
+  align-self:     stretch;
+}
+
+/* ── Action button row ───────────────────────────────────────
+   Figma layout_FPOIYH: row · stretch · gap 10px (single child) */
+.map-action-btns {
+  display:    flex;
+  align-self: stretch;
+  gap:        var(--space-2-5);   /* 10px */
+}
+
+/* "толочити" — State-layer / state=pressed / size=large
+   Figma 1669:13553 · fill_JL47K4(#7A2EEF) · pad 16px 80px · r 32px
+   Desktop/Label Special/special-md: Manrope SemiBold 600 · 16px · UPPER · white */
+.btn--accepted {
+  width:            100%;
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  background-color: var(--color-purple-dark);    /* #7A2EEF */
+  border:           1.5px solid var(--color-purple-dark);
+  border-radius:    var(--radius-btn-toolbar);   /* 32px */
+  padding-block:    var(--space-4);              /* 16px */
+  padding-inline:   0;
+  font-size:        var(--text-base);            /* 16px */
+  font-weight:      var(--font-weight-semibold);
+  font-family:      var(--font-body);
+  line-height:      var(--line-height-label);
+  text-transform:   uppercase;
+  letter-spacing:   var(--letter-spacing-normal);
+  color:            var(--color-white);
+  cursor:           pointer;
+}
+
+/* "прийнято" button — Figma node 1669:13570
+   fill_QZ9TCM #7A2EEF · white UPPER SemiBold · r 32px
+   Figma pad 16px 80px is designed for full-width; at half-row (~162 px)
+   16px inline gives visible breathing room without overflow.
+   min-width:0 lets the flex item shrink to its flex:1 lane.          */
+.btn--pryyniato {
+  flex:             1;
+  min-width:        0;                           /* allow flex shrink   */
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  background-color: var(--color-purple-dark);    /* #7A2EEF */
+  border:           1.5px solid var(--color-purple-dark);
+  border-radius:    var(--radius-btn-toolbar);   /* 32px */
+  padding-block:    var(--space-4);              /* 16px — Figma exact  */
+  padding-inline:   var(--space-4);              /* 16px — Figma 80px → scaled to half-width */
+  font-size:        var(--text-base);            /* 16px */
+  font-weight:      var(--font-weight-semibold);
+  font-family:      var(--font-body);
+  line-height:      var(--line-height-label);    /* 100% */
+  text-transform:   uppercase;
+  letter-spacing:   var(--letter-spacing-normal);
+  color:            var(--color-white);
+  cursor:           pointer;
+}
+
+/* "Мінуснутися" button — Figma node 1669:13571
+   Transparent bg · #0D0E0F stroke 1.5px · r 32px
+   Figma pad 12px 24px; at half-row 24px leaves 114px for
+   icon(24)+gap(8)+text(~84px)=116px → overflow.
+   12px inline → 139px clearance, all content fits.
+   min-width:0 lets the flex item shrink to its flex:1 lane.          */
+.btn--minusnutysya {
+  flex:             1;
+  min-width:        0;                           /* allow flex shrink   */
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  gap:              var(--space-2);              /* 8px — Figma layout_K1RLB4 */
+  background-color: transparent;
+  border:           1.5px solid var(--color-text);  /* #0D0E0F */
+  border-radius:    var(--radius-btn-toolbar);   /* 32px */
+  padding-block:    var(--space-3);              /* 12px — Figma exact  */
+  padding-inline:   var(--space-3);              /* 12px — Figma 24px → halved to prevent overflow */
+  font-size:        var(--text-base);            /* 16px */
+  font-weight:      var(--font-weight-semibold);
+  font-family:      var(--font-body);
+  line-height:      var(--line-height-label);    /* 100% */
+  color:            var(--color-text);           /* #0D0E0F */
+  cursor:           pointer;
+}
+
+.btn--minusnutysya svg {
+  width:       1.5rem;   /* 24px — layout_6B1EQF */
+  height:      1.5rem;
+  display:     block;
+  flex-shrink: 0;
+}
+
+.btn--minusnutysya:hover {
+  background-color: var(--state-hover);
+}
+
+/* ── Event image area ────────────────────────────────────────
+   Figma node 1256:15223 — Event Image Container
+   layout_738UBK: column · fill · pad 20px 0 · gap 10px
+   Image: layout_0C3IXA — fill width × 266px fixed height     */
+.map-event-photo-wrap {
+  padding:  var(--space-5) 0;   /* 20px top/bottom, no sides */
+  width:    100%;
+}
+
+.map-event-photo {
+  width:  100%;
+  height: 16.625rem;   /* 266px — layout_0C3IXA exact */
+  overflow: hidden;
+}
+.map-event-photo img {
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+  display:    block;
+}
+
+/* ── Event Description ───────────────────────────────────────
+   Figma node 1102:14412 — layout_G1ZV41
+   Column · fill · gap 20px · padding 20px                    */
+.map-description {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-5);   /* 20px */
+  padding:        var(--space-5);   /* 20px */
+}
+
+/* Body text
+   Mobile/Body/body-lg mobile: Manrope Regular 400 · 20px · 120% lh */
+.map-description__text {
+  font-family: var(--font-body);
+  font-size:   var(--text-xl);             /* 20px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);   /* 120% */
+  color:       var(--color-text);
+}
+
+/* Section divider — Figma Vector42/44: rgba(0,0,0,0.2) stroke */
+.map-divider {
+  height:     1px;
+  border:     none;
+  background: var(--color-divider);   /* rgba(0,0,0,0.2) */
+  flex-shrink: 0;
+}
+
+/* Info block — Figma layout_BFDEI8: column · stretch · gap 20px · pad 20px 0 */
+.map-info-block {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  gap:            var(--space-5);   /* 20px */
+  padding:        var(--space-5) 0; /* 20px 0 */
+}
+
+/* Additional Info Block (links) — Figma node 1102:14411 · layout_RJNRC4
+   Overrides gap: 20px → 10px. Padding stays the same (20px 0).         */
+.map-info-block--links {
+  gap: var(--space-2-5);   /* 10px — layout_RJNRC4 exact */
+}
+
+/* Info row — Figma layout_38HSGR: row · center · gap 12px    */
+.map-info-row {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-3);   /* 12px */
+}
+.map-info-row img,
+.map-info-row svg {
+  width:       1.5rem;   /* 24px */
+  height:      1.5rem;
+  flex-shrink: 0;
+  display:     block;
+}
+
+/* Info text
+   style_KA9S18: Manrope Medium 500 · 16px · 120% lh          */
+.map-info-row__text {
+  font-family: var(--font-body);
+  font-size:   var(--text-base);           /* 16px */
+  font-weight: var(--font-weight-medium);  /* 500 */
+  line-height: var(--line-height-tight);   /* 120% */
+  color:       var(--color-text);
+}
+
+/* Link variant — vivid purple underline */
+.map-info-row__link {
+  color:           var(--color-purple-vivid);   /* #8A38F5 */
+  text-decoration: underline;
+}
+
+/* ── Participants List — Figma node 1385:4747 ────────────────
+   layout_1K1461: column · center · stretch · gap 28px · pad 20px · r 20px */
+.map-participants {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  align-self:     stretch;
+  gap:            1.75rem;          /* 28px */
+  padding:        var(--space-5);   /* 20px */
+  border-radius:  var(--radius-badge); /* 20px */
+}
+
+/* "Організатори" heading
+   style_SN82CU: Unbounded Regular 400 · 20px · 120% lh · no uppercase */
+.map-participants__title {
+  font-family: var(--font-heading);
+  font-size:   var(--text-xl);      /* 20px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight); /* 120% */
+  color:       var(--color-text);
+}
+
+/* Organizer card row — layout_LWBA26: row · center · gap 12px  */
+.map-organizer-list {
+  display:         flex;
+  justify-content: center;
+  gap:             var(--space-3);  /* 12px */
+}
+
+/* Single organizer card — layout_AFYH3J: column · center · gap 8px · 90px wide */
+.map-organizer-card {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-2);   /* 8px */
+  width:          5.625rem;         /* 90px */
+}
+
+/* Avatar circle — layout_D4ZACG: 60×60 · white bg · r 50px    */
+.map-organizer-avatar {
+  width:            3.75rem;        /* 60px */
+  height:           3.75rem;
+  border-radius:    50%;
+  overflow:         hidden;
+  flex-shrink:      0;
+  background-color: var(--color-white);
+}
+.map-organizer-avatar img {
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+  display:    block;
+}
+
+/* Organizer name — Mobile/Body/body-question mobile:
+   Manrope Medium 500 · 12px · center · width 80px              */
+.map-organizer-name {
+  width:       5rem;                /* 80px */
+  font-family: var(--font-body);
+  font-size:   var(--text-xs);      /* 12px */
+  font-weight: var(--font-weight-medium);
+  text-align:  center;
+  color:       var(--color-text);
+}
+
+/* ── Participants Block wrapper — Figma 1102:15031 ───────────
+   layout_XFU5AS: column · stretch · gap 20px · pad 20px      */
+.map-participants-block {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  align-self:     stretch;
+  gap:            var(--space-5);   /* 20px */
+  padding:        var(--space-5);   /* 20px */
+}
+
+/* ── Учасники list — Figma 1385:4659 ────────────────────────
+   layout_248PS3: column · stretch · gap 28px · pad 20px 20px 40px · r 20px */
+.map-uchasnyky {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  gap:            1.75rem;                              /* 28px */
+  padding:        var(--space-5) var(--space-5) var(--space-10);
+  border-radius:  var(--radius-badge);                 /* 20px */
+}
+
+/* Header: title + count chip — layout_S9R5G0: row · center · justify-center */
+.map-uchasnyky__header {
+  display:         flex;
+  justify-content: center;
+  align-items:     center;
+  gap:             var(--space-5);  /* 20px */
+}
+
+/* Count chip "7/9" — layout_4ZJR60: auto-width · border 1px · r 27px · pad 4px 12px */
+.map-uchasnyky__count {
+  display:         inline-flex;
+  justify-content: center;
+  align-items:     center;
+  padding:         var(--space-1) var(--space-3);  /* 4px 12px */
+  border:          1px solid var(--color-text);
+  border-radius:   1.6875rem;                      /* 27px */
+  font-family:     var(--font-body);
+  font-size:       var(--text-xs);                 /* 12px */
+  font-weight:     var(--font-weight-medium);
+  line-height:     var(--line-height-tight);       /* 120% */
+  color:           var(--color-text);
+  white-space:     nowrap;
+}
+
+/* Members container — layout_6MZAL3: column · center · stretch · gap 16px */
+.map-uchasnyky__container {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  align-self:     stretch;
+  gap:            var(--space-4);   /* 16px */
+}
+
+/* Member list — layout_KXS03F: column · stretch · gap 10px */
+.map-member-list {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  align-self:     stretch;
+  gap:            var(--space-2-5); /* 10px */
+}
+
+/* Member row — layout_KJVCSP: row · space-between · center · stretch */
+.map-member-row {
+  display:         flex;
+  justify-content: space-between;
+  align-items:     center;
+  align-self:      stretch;
+}
+
+/* Left cluster: avatar + name — layout_MIZLMH: row · center · gap 10px */
+.map-member-info {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-2-5);   /* 10px */
+}
+
+/* Avatar — layout_OI3SFT: 40×40 · circle · white bg */
+.map-member-avatar {
+  width:            2.5rem;        /* 40px */
+  height:           2.5rem;
+  border-radius:    50%;
+  overflow:         hidden;
+  flex-shrink:      0;
+  background-color: var(--color-white);
+}
+.map-member-avatar img {
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+  display:    block;
+}
+
+/* Name — style_S7M72R: Manrope Medium 500 · 16px · 120% lh */
+.map-member-name {
+  font-family: var(--font-body);
+  font-size:   var(--text-base);          /* 16px */
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);  /* 120% */
+  color:       var(--color-text);
+}
+
+/* Tag circle — layout_GYWKAN: 40×40 · row center · r 50% · no border */
+.map-member-tag {
+  position:        relative;
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  width:           2.5rem;         /* 40px */
+  height:          2.5rem;
+  border-radius:   50%;
+  flex-shrink:     0;
+}
+.map-member-tag img {
+  width:   0.9375rem;  /* 15px */
+  height:  0.9375rem;
+  display: block;
+}
+
+/* Count badge — absolute top-right · 14×14 · r 8px · #BBB1FF */
+.map-member-tag__count {
+  position:         absolute;
+  top:              0;
+  right:            0;
+  width:            0.875rem;      /* 14px */
+  height:           0.875rem;
+  display:          flex;
+  align-items:      center;
+  justify-content:  center;
+  background-color: var(--color-purple-pagination);  /* #BBB1FF */
+  border-radius:    0.5rem;        /* 8px */
+  font-family:      var(--font-body);
+  font-size:        0.5rem;        /* 8px */
+  font-weight:      var(--font-weight-medium);
+  line-height:      1;
+  text-transform:   uppercase;
+  color:            var(--color-text);
+}
+
+/* "Показати більше учасників" — State-layer small · pad 4px 16px · r 32px */
+.map-show-more {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         var(--space-1) var(--space-4);     /* 4px 16px */
+  border:          1.5px solid var(--color-purple-primary);  /* #A978FF */
+  border-radius:   var(--radius-btn-toolbar);         /* 32px */
+  background:      transparent;
+  font-family:     var(--font-body);
+  font-size:       var(--text-sm);                    /* 14px */
+  font-weight:     var(--font-weight-semibold);
+  line-height:     var(--line-height-label);          /* 100% */
+  color:           var(--color-purple-primary);       /* #A978FF */
+  cursor:          pointer;
+}
+
+/* "+2 незареєстровані" note — style_V72Q0R: Manrope Medium 500 · 14px · rgba(13,14,15,0.7) */
+.map-unregistered {
+  font-family: var(--font-body);
+  font-size:   var(--text-sm);              /* 14px */
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);    /* 120% */
+  color:       var(--color-text-dim);       /* rgba(13,14,15,0.70) */
+}
+
+/* ── Requirements List — Figma node 1102:16475 ───────────────
+   layout_URGPP1: column · stretch · gap 40px · pad 20/20/40px · r 20px */
+.map-requirements {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  align-self:     stretch;
+  gap:            var(--space-10);  /* 40px — between header and items */
+  padding:        var(--space-5) var(--space-5) var(--space-10);
+  border-radius:  var(--radius-badge);  /* 20px */
+}
+
+/* Requirements Header — layout_JJF5I2: column · stretch · gap 20px */
+.map-requirements__header {
+  display:        flex;
+  flex-direction: column;
+  align-self:     stretch;
+  gap:            var(--space-5);   /* 20px */
+}
+
+/* Title — style_GZKS3Y: Unbounded Regular 400 · 20px · 120% · no uppercase */
+.map-requirements__title {
+  font-family: var(--font-heading);
+  font-size:   var(--text-xl);      /* 20px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);  /* 120% */
+  color:       var(--color-text);
+}
+
+/* Subtitle — style_N4C6Z1: Manrope Light 300 · 16px · 120% · black */
+.map-requirements__subtitle {
+  font-family: var(--font-body);
+  font-size:   var(--text-base);    /* 16px */
+  font-weight: 300;                 /* Light — loaded via Google Fonts */
+  line-height: var(--line-height-tight);  /* 120% */
+  color:       var(--color-text);   /* #000000 */
+}
+
+/* Items container — layout_1RD7DU: column · stretch · gap 10px */
+.map-requirements__list {
+  list-style:     none;
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  gap:            var(--space-2-5); /* 10px */
+}
+
+/* Each list item row — layout_SX57NQ: row · stretch · gap 10px */
+.map-requirements__item {
+  display: block;   /* label fills full width */
+}
+
+/* ── Animated checkbox ───────────────────────────────────────
+   label wraps hidden input + custom box + text
+   Figma: CheckSquare component · 20×20 · State=Default / State=Checked */
+
+.req-item {
+  display:     flex;
+  align-items: flex-start;
+  gap:         var(--space-2-5);   /* 10px — layout_SX57NQ gap */
+  cursor:      pointer;
+  user-select: none;
+}
+
+/* Native input — visually hidden, stays accessible */
+.req-item__input {
+  position: absolute;
+  width:     1px;
+  height:    1px;
+  padding:   0;
+  margin:    -1px;
+  overflow:  hidden;
+  clip:      rect(0, 0, 0, 0);
+  border:    0;
+}
+
+/* Custom checkbox box — 20×20 · rounded square · border */
+.req-item__box {
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  flex-shrink:      0;
+  width:            1.25rem;       /* 20px */
+  height:           1.25rem;
+  border-radius:    0.25rem;       /* 4px */
+  border:           1.5px solid var(--color-text);
+  background-color: transparent;
+  margin-top:       0.1rem;        /* optical baseline alignment */
+  transition:
+    background-color 200ms ease,
+    border-color     200ms ease,
+    transform        150ms ease;
+}
+
+/* Box bounce on check */
+.req-item__input:checked + .req-item__box {
+  background-color: var(--color-purple-dark);  /* #7A2EEF */
+  border-color:     var(--color-purple-dark);
+  transform:        scale(1.08);
+  animation:        req-box-pop 300ms ease forwards;
+}
+
+@keyframes req-box-pop {
+  0%   { transform: scale(1.00); }
+  40%  { transform: scale(1.15); }
+  70%  { transform: scale(0.95); }
+  100% { transform: scale(1.00); }
+}
+
+/* Checkmark SVG — path draws in via stroke-dashoffset */
+.req-item__check {
+  width:    0.75rem;   /* 12px */
+  height:   0.5625rem; /* 9px */
+  display:  block;
+  overflow: visible;
+}
+
+.req-item__check path {
+  stroke-dasharray:  20;
+  stroke-dashoffset: 20;
+  transition: stroke-dashoffset 250ms ease 80ms;
+}
+
+.req-item__input:checked + .req-item__box .req-item__check path {
+  stroke-dashoffset: 0;
+}
+
+/* Item text — style_61X2W6: Manrope Medium 500 · 16px · 120% */
+.req-item__text {
+  font-family: var(--font-body);
+  font-size:   var(--text-base);          /* 16px */
+  font-weight: var(--font-weight-medium); /* 500 */
+  line-height: var(--line-height-tight);  /* 120% */
+  color:       var(--color-text);
+  transition:
+    color           200ms ease,
+    text-decoration 200ms ease,
+    opacity         200ms ease;
+}
+
+/* Checked text — subtle strikethrough */
+.req-item__input:checked + .req-item__box + .req-item__text {
+  text-decoration: line-through;
+  opacity:         0.45;
+}
+
+/* Focus ring for keyboard users */
+.req-item__input:focus-visible + .req-item__box {
+  outline:        2px solid var(--color-purple-dark);
+  outline-offset: 2px;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .req-item__box,
+  .req-item__check path,
+  .req-item__text {
+    transition:  none;
+    animation:   none;
+  }
+}
+
+/* ── Photo actions section (sibling of Event Info) ───────────
+   Figma node 1127:15985 — layout_QAI9SG
+   Column · center · stretch · gap 20px · padding 20px 0px 40px
+   No horizontal padding — inner block (map-extra-info) carries its own */
+.map-photo-actions {
+  display:          flex;
+  flex-direction:   column;
+  align-items:      center;              /* centres hug-width children  */
+  gap:              var(--space-5);      /* 20px */
+  padding:          var(--space-5) 0 var(--space-10);  /* 20px 0 40px */
+  max-width:        var(--viewport-mobile);
+  margin-inline:    auto;
+  width:            100%;
+  background-color: var(--color-white);
+}
+
+/* Action Buttons row — Figma layout_RWOVGV: row · gap 20px · hug */
+.map-photo-btns {
+  display: flex;
+  gap:     var(--space-5);   /* 20px */
+}
+
+/* Borderless photo tab buttons — Figma State-layer 1593:16322 / 1593:16328
+   No stroke, no fill on the button itself — label text + padding only
+   pad 8px 16px · r 32px · Manrope SemiBold 600 · 16px · 100% lh       */
+.btn--photo {
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  border:           none;                             /* no outline — Figma has no strokes */
+  background-color: transparent;
+  border-radius:    var(--radius-btn-toolbar);        /* 32px */
+  padding:          var(--space-2) var(--space-4);    /* 8px 16px */
+  font-size:        var(--text-base);                 /* 16px */
+  font-family:      var(--font-body);
+  font-weight:      var(--font-weight-semibold);      /* 600 */
+  line-height:      var(--line-height-label);         /* 100% */
+  letter-spacing:   var(--letter-spacing-normal);
+  color:            var(--color-text);                /* #0D0E0F — fill_GXEDWD */
+}
+
+/* Disabled state — fill_8CS7VE: #A9B2B7 text only (no border to recolour) */
+.btn--photo:disabled,
+.btn--photo[aria-disabled="true"] {
+  color:          var(--color-disabled-fg);   /* #A9B2B7 */
+  cursor:         default;
+  pointer-events: none;
+}
+
+/* Extra Info Block — Figma layout_VEW1SS: col · stretch · gap 10px · pad 0 20px */
+.map-extra-info {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  align-self:     stretch;
+  gap:            var(--space-2-5);   /* 10px */
+  padding:        0 var(--space-5);   /* 0 20px */
+}
+
+/* Extra photo — fill × 250px · border-radius 20px
+   Figma node 1127:15978 — layout_92O4KQ                          */
+.map-extra-photo {
+  width:         100%;
+  height:        15.625rem;   /* 250px — layout_92O4KQ exact */
+  overflow:      hidden;
+  border-radius: 1.25rem;     /* 20px — Figma borderRadius exact */
+}
+.map-extra-photo img {
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+  display:    block;
+}
+
+/* Photo pagination — Figma layout_T4E0WO: row · center · gap 10px
+   All dots fill #BBB1FF · active 30×8 · inactive 8×8 · r 19px    */
+.map-photo-pagination {
+  display:         flex;
+  justify-content: center;
+  align-items:     center;
+  gap:             var(--space-2-5);   /* 10px */
+}
+
+.map-photo-pagination__dot {
+  width:            0.5rem;                          /*  8px */
+  height:           0.5rem;                          /*  8px */
+  border-radius:    var(--radius-pagination);        /* 19px — fully rounded */
+  background-color: var(--color-purple-pagination);  /* #BBB1FF */
+  flex-shrink:      0;
+}
+
+.map-photo-pagination__dot--active {
+  width: 1.875rem;   /* 30px — active dot wider */
+}

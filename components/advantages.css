@@ -1,0 +1,168 @@
+/* ============================================================
+   Component: Advantages Section
+   Figma node 1261:4808 — Advantages
+   Layout: column · center · padding 60px 0 · full-bleed tracks
+   6 marquee rows, alternating direction, seamless loop via
+   duplicate sets (translateX 0 → -50%)
+   ============================================================ */
+
+/* ── Section ─────────────────────────────────────────────────
+   No horizontal padding — tracks overflow full viewport width */
+.advantages {
+  padding: var(--space-15) 0;              /* 60px 0 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-10);                    /* 40px */
+  overflow: hidden;
+  background-color: var(--color-bg);
+  width: 100%;
+}
+
+/* ── Title ───────────────────────────────────────────────────
+   Figma node 1261:4809
+   Unbounded · Regular 400 · 20px · UPPER · #0D0E0F           */
+.advantages-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);              /* 20px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+  padding-inline: var(--space-5);         /* align with page margin */
+}
+
+/* ── Tracks wrapper ──────────────────────────────────────────
+   Figma node 1261:4810 — Advantage section (INSTANCE)
+   column · gap 10px · full width                              */
+.advantages-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2-5);                  /* 10px */
+  width: 100%;
+}
+
+/* ── Single row — clips the scrolling track ──────────────────
+   Figma: Advantage row 1–6                                    */
+.adv-row {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ── Track — 2 duplicate sets · animates horizontally ────────
+   Figma: Track 1–6 (each holds 2 Advantage sets)
+   gap: 4px between items                                      */
+.adv-track {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);                    /* 4px */
+  width: max-content;
+  will-change: transform;
+  animation: adv-marquee-ltr 22s linear infinite;
+}
+
+/* Reverse direction (even rows) */
+.adv-track--rtl {
+  animation-name: adv-marquee-rtl;
+}
+
+/* Per-row durations — varied for natural feel */
+.adv-row:nth-child(1) .adv-track { animation-duration: 20s; }
+.adv-row:nth-child(2) .adv-track { animation-duration: 26s; }
+.adv-row:nth-child(3) .adv-track { animation-duration: 22s; }
+.adv-row:nth-child(4) .adv-track { animation-duration: 28s; }
+.adv-row:nth-child(5) .adv-track { animation-duration: 23s; }
+.adv-row:nth-child(6) .adv-track { animation-duration: 25s; }
+
+/* Keyframes — translate by exactly -50% so set 2 loops → set 1 */
+@keyframes adv-marquee-ltr {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes adv-marquee-rtl {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* Accessibility: respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .adv-track {
+    animation-play-state: paused;
+  }
+}
+
+/* ── Advantage set — row of items ────────────────────────────
+   Figma: Advantage set / Dublicate Advantage set
+   row · center · gap 4px                                      */
+.adv-set {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);                    /* 4px */
+  flex-shrink: 0;
+}
+
+/* ── Advantage item base ─────────────────────────────────────
+   Figma: Advantage (text) — height 50px · padding 10px 20px
+   Manrope Medium 500 · 20px · radius 24px                    */
+.adv-item {
+  height: 3.125rem;                       /* 50px */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2-5) var(--space-5); /* 10px 20px */
+  border-radius: var(--radius-advantage); /* 24px */
+  font-family: var(--font-body);
+  font-size: var(--text-xl);              /* 20px */
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-label);
+  white-space: nowrap;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* White pill — white bg · dark text
+   Figma: Type=Text · Color=Violet text (fill_4ABHDX)         */
+.adv-item--white {
+  background-color: var(--color-white);
+  color: var(--color-text);
+}
+
+/* Purple pill — #A978FF bg · white text
+   Figma: Type=Text · Color=Purple (fill_4UFQM9)              */
+.adv-item--purple {
+  background-color: var(--color-purple-primary);
+  color: var(--color-white);
+}
+
+/* Violet pill — #9251FB bg · white text
+   Figma: Type=Text · Color=Violet (fill_DV2G27)              */
+.adv-item--violet {
+  background-color: var(--color-purple-accent);
+  color: var(--color-white);
+}
+
+/* Violet-text pill — white bg · purple text
+   Figma: Type=Text · Color=Violet text — fill_4ABHDX
+   White background with #A978FF label (missing variant)      */
+.adv-item--violet-text {
+  background-color: var(--color-white);
+  color: var(--color-purple-primary);                       /* #A978FF */
+}
+
+/* Image square — 50×50 · radius 24px 24px 0 24px
+   Figma: Type=Pic · Color=White — no bottom-right corner     */
+.adv-item--pic {
+  width: 3.125rem;                        /* 50px */
+  padding: 0;
+  border-radius: var(--radius-advantage) var(--radius-advantage)
+                 0 var(--radius-advantage); /* 24px 24px 0 24px */
+  background-color: var(--color-white);
+  overflow: hidden;
+}
+
+.adv-item--pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

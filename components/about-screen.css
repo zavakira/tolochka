@@ -1,0 +1,629 @@
+/* ============================================================
+   About Screen — "Про нас" overlay
+   Figma: node 1691:5491
+   Lives inside #screen-container (position:fixed;inset:0).
+   Hidden with display:none by default; display:block when active.
+   Trigger: #btn-about → .about-screen--open (transition.js)
+   ============================================================ */
+
+/* ── Overlay panel ───────────────────────────────────────────
+   position:absolute within the fixed #screen-container.
+   Centred to --viewport-mobile (375px); fills full height.
+   No transform, no transition — switch is instant.           */
+.about-screen {
+  display:    none;
+  position:   absolute;
+  top:        0;
+  bottom:     0;
+  left:       max(0px, calc(50% - (var(--viewport-mobile) / 2)));
+  width:      min(var(--viewport-mobile), 100%);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: var(--color-white);
+  -webkit-overflow-scrolling: touch;
+}
+
+/* flex column — consistent layout context with body → .site-header renders identically */
+.about-screen--open {
+  display:        flex;
+  flex-direction: column;
+}
+
+/* ── Hero ────────────────────────────────────────────────────
+   Figma layout_Q2UNN6: fixed height 720px
+   Children are absolutely positioned inside.                  */
+.about-hero {
+  position: relative;
+  width:    100%;
+  height:   45rem;                         /* 720px */
+  overflow: hidden;
+}
+
+/* Slider wrapper (layout_DBRV1P: absolute, 375×720, x:0 y:0) */
+.about-hero__slider-wrapper {
+  position: absolute;
+  inset:    0;
+}
+
+/* Hero image — shows Slide 3 (default visible in Figma)     */
+.about-hero__img {
+  display:           block;
+  width:             100%;
+  height:            100%;
+  object-fit:        cover;
+  object-position:   center;
+}
+
+/* Full-height shadow overlay (fill_RHZKVT: rgba(13,14,15,0.5)) */
+.about-hero__shadow {
+  position:         absolute;
+  inset:            0;
+  background-color: var(--color-text-muted-half);
+}
+
+/* Bottom gradient overlay (layout_I9V0SA: y=465, h=255)     */
+.about-hero__gradient {
+  position:   absolute;
+  bottom:     0;
+  left:       0;
+  right:      0;
+  height:     15.9375rem;                  /* 255px */
+  background: var(--gradient-about-hero-overlay);
+}
+
+/* Hero text wrapper (layout_OPEDNZ: x=30, y=250, w=315)     */
+.about-hero__text-wrapper {
+  position:        absolute;
+  top:             15.625rem;              /* 250px */
+  left:            1.875rem;              /* 30px  */
+  width:           19.6875rem;            /* 315px */
+  display:         flex;
+  flex-direction:  column;
+  justify-content: center;
+  align-items:     center;
+  gap:             0.625rem;              /* 10px  */
+}
+
+/* "творимо зміни разом" (Mobile/Display/display mobile: Unbounded Medium 30px) */
+.about-hero__heading {
+  font-family:    var(--font-heading);
+  font-weight:    var(--font-weight-medium);
+  font-size:      var(--text-3xl);        /* 30px */
+  line-height:    var(--line-height-tight); /* 120% */
+  text-transform: uppercase;
+  text-align:     center;
+  color:          var(--color-white);
+}
+
+/* "Lviv. Ukraine. Toloka family" (body-md: Manrope Medium 16px) */
+.about-hero__location {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size:   var(--text-base);          /* 16px */
+  line-height: var(--line-height-normal); /* 150% */
+  text-align:  center;
+  color:       var(--color-white);
+}
+
+/* Main description (layout_ICFHHL: x=30, y=575, w=315, h=72) */
+.about-hero__desc {
+  position:    absolute;
+  top:         35.9375rem;               /* 575px */
+  left:        1.875rem;                /* 30px  */
+  width:       19.6875rem;              /* 315px */
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size:   var(--text-base);        /* 16px */
+  line-height: var(--line-height-normal); /* 150% */
+  text-align:  center;
+  color:       var(--color-white);
+}
+
+/* ── About Project Section ───────────────────────────────────
+   Figma layout_HNKQVL: column, center, gap: 40px, padding: 100px 20px
+   NOTE: named .screen-about-meta (not .about-project) to avoid
+   collision with the identically-named block in about.css.     */
+.screen-about-meta {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  align-self:      stretch;
+  gap:             var(--space-10);      /* 40px */
+  padding:         var(--space-30) var(--space-5); /* 120px 20px — Figma layout_1PEG64 */
+}
+
+/* Objective subsection (layout_8SVI32: column, center, stretch, gap: 28px) */
+.about-objective {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  align-self:     stretch;
+  gap:            1.75rem;               /* 28px */
+}
+
+/* Shared section heading (Mobile/Headings/h1: Unbounded Regular 20px uppercase) */
+.about-section-heading {
+  font-family:    var(--font-heading);
+  font-weight:    var(--font-weight-regular);
+  font-size:      var(--text-xl);        /* 20px */
+  text-transform: uppercase;
+  text-align:     center;
+  color:          var(--color-text);     /* fill_3YZ5T3 — #0D0E0F */
+}
+
+/* Objective description (layout_7PHA0D: w=335px, body-md center) */
+.about-objective__desc {
+  width:       20.9375rem;              /* 335px */
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size:   var(--text-base);        /* 16px */
+  line-height: var(--line-height-normal); /* 150% */
+  text-align:  center;
+  color:       var(--color-black);
+}
+
+/* "толочити" CTA button (Figma 1922:14223 — State-layer large)
+   fill_EPFDDL: #7A2EEF · borderRadius: 32px · special-lg: SemiBold 18px UPPER */
+.about-cta-btn {
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  gap:              0.75rem;
+  padding:          1rem var(--space-20); /* 16px 80px */
+  background-color: var(--color-purple-dark);   /* #7A2EEF — Figma fill_EPFDDL */
+  border:           none;
+  border-radius:    var(--radius-btn-toolbar);  /* 32px */
+  font-family:      var(--font-body);
+  font-size:        var(--text-lg);             /* 18px — special-lg */
+  font-weight:      var(--font-weight-semibold);
+  color:            var(--color-white);
+  text-transform:   uppercase;
+  text-decoration:  none;
+  cursor:           pointer;
+  line-height:      var(--line-height-label);
+  transition:       opacity var(--transition-fast);
+}
+.about-cta-btn:hover { opacity: 0.9; }
+
+/* ── Trust Section ───────────────────────────────────────────
+   Figma layout_P0J7EF: column, center, stretch, gap: 60px, padding: 60px 20px */
+.about-trust {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  align-self:      stretch;
+  gap:             var(--space-15);      /* 60px */
+  padding:         var(--space-15) var(--space-5); /* 60px 20px */
+}
+
+/* Values container (layout_OL9MEE: column, stretch, gap: 40px, padding:0 20px, w:335px) */
+.about-values {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  gap:            var(--space-10);       /* 40px */
+  padding:        0 var(--space-5);      /* 0 20px */
+  width:          20.9375rem;            /* 335px */
+}
+
+/* Each value item (layout_LSOSB3: column, stretch, gap: 20px — NO card border) */
+.value-item {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  gap:            var(--space-5);        /* 20px */
+}
+
+/* Title row (layout_7Y2JFN: row, center, stretch, gap: 20px) */
+.value-item__title {
+  display:        flex;
+  flex-direction: row;
+  align-items:    center;
+  align-self:     stretch;
+  gap:            var(--space-5);        /* 20px */
+}
+
+/* Icon slot (layout_EBUTUI: width:24px, fill_5E85BP:[] → currentColor) */
+.value-item__icon {
+  width:       1.5rem;                   /* 24px */
+  height:      1.5rem;
+  flex-shrink: 0;
+  color:       var(--color-purple-primary);
+}
+
+/* Title text (Mobile/Body/body-lg: Manrope Regular 20px, 120%) */
+.value-item__name {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-regular);
+  font-size:   var(--text-xl);           /* 20px */
+  line-height: var(--line-height-tight); /* 120% */
+  color:       var(--color-black);
+}
+
+/* Description (body-md left: Manrope Medium 16px, 150%) */
+.value-item__desc {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size:   var(--text-base);         /* 16px */
+  line-height: var(--line-height-normal); /* 150% */
+  text-align:  left;
+  color:       var(--color-black);
+}
+
+/* ── Team Section ────────────────────────────────────────────
+   Figma layout_53QYIY: column, stretch, gap: 60px, padding: 60px 20px */
+.about-team {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  align-self:     stretch;
+  gap:            var(--space-15);       /* 60px */
+  padding:        var(--space-15) var(--space-5); /* 60px 20px */
+}
+
+/* Team header (layout_CIOKC9: column, center, stretch, gap: 28px) */
+.about-team__header {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  align-self:     stretch;
+  gap:            var(--space-7);        /* 28px — Figma layout_CIOKC9 */
+}
+
+/* Team description (layout_5A01U1: w=315px, body-md center) */
+.about-team__desc {
+  width:       19.6875rem;              /* 315px */
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size:   var(--text-base);        /* 16px */
+  line-height: var(--line-height-normal); /* 150% */
+  text-align:  center;
+  color:       var(--color-black);
+}
+
+/* Members image container (layout_X0MBQ8: column, stretch, gap:10px, padding:10px 0)
+   Figma node 1877:5164 — card grid replaced with single composite image fill.  */
+.about-team__members {
+  display:        flex;
+  flex-direction: column;
+  align-self:     stretch;
+  gap:            var(--space-2-5);      /* 10px */
+  padding:        var(--space-2-5) 0;   /* 10px 0 */
+}
+
+/* Composite team image (all 8 members, 335×419 px at 1×) */
+.about-team__members-img {
+  display: block;
+  width:   100%;
+  height:  auto;
+}
+
+/* ── Social Media Section ────────────────────────────────────
+   Figma layout_88XJ95: row, center, stretch, gap:10px, padding:120px 0
+   position:relative to host absolutely-positioned bg.         */
+.about-social {
+  position:        relative;
+  display:         flex;
+  flex-direction:  row;
+  justify-content: center;
+  align-items:     center;
+  align-self:      stretch;
+  padding:         var(--space-30) 0;     /* 120px 0 — Figma layout_D2I0SR */
+  overflow:        hidden;
+}
+
+/* Background container (layout_RYMN3E: absolute, y=61, 375×384) */
+.about-social__bg {
+  position: absolute;
+  top:      3.8125rem;                  /* 61px */
+  left:     0;
+  width:    100%;
+  height:   24rem;                       /* 384px */
+}
+
+.about-social__bg-img {
+  position:          absolute;
+  inset:             0;
+  display:           block;
+  width:             100%;
+  height:            100%;
+  object-fit:        cover;
+  object-position:   center;
+}
+
+/* Dark overlay with blur (fill_7AKT8Q: rgba(13,14,15,0.7), effect_U4IJ0X: blur(4px)) */
+.about-social__overlay {
+  position:           absolute;
+  inset:              0;
+  background-color:   var(--color-about-social-overlay);
+  backdrop-filter:    blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Content panel (layout_RDNQJH: column, center, stretch, gap:40px, w:335px) */
+.about-social__content {
+  position:        relative;
+  z-index:         var(--z-raised);
+  display:         flex;
+  flex-direction:  column;
+  justify-content: center;
+  align-items:     stretch;
+  gap:             var(--space-10);      /* 40px */
+  width:           20.9375rem;           /* 335px */
+}
+
+/* Social header (layout_0M5LQL: column, stretch, gap:28px) */
+.about-social__header {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  align-self:     stretch;
+  gap:            1.75rem;               /* 28px */
+}
+
+/* "Соцмережі" (display2: Unbounded Medium 24px, 120%, uppercase, center, white) */
+.about-social__heading {
+  font-family:    var(--font-heading);
+  font-weight:    var(--font-weight-medium);
+  font-size:      var(--text-2xl);       /* 24px */
+  line-height:    var(--line-height-tight); /* 120% */
+  text-transform: uppercase;
+  text-align:     center;
+  color:          var(--color-white);
+}
+
+/* Description (body-lg center: Manrope Regular 20px, 120%, white) */
+.about-social__desc {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-regular);
+  font-size:   var(--text-xl);           /* 20px */
+  line-height: var(--line-height-tight); /* 120% */
+  text-align:  center;
+  color:       var(--color-white);
+}
+
+/* Links row (layout_9AQN2U: row, center, stretch, gap:12px) */
+.about-social__links {
+  display:         flex;
+  flex-direction:  row;
+  justify-content: center;
+  align-self:      stretch;
+  gap:             0.75rem;              /* 12px */
+}
+
+/* Social card (layout_0NOFLQ: column, center, gap:8px, w:100px) */
+.social-card {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            0.5rem;                /* 8px */
+  width:          6.25rem;              /* 100px */
+  text-decoration: none;
+}
+
+/* Avatar (60×60, borderRadius:50px) */
+.social-card__avatar {
+  width:         3.75rem;               /* 60px */
+  height:        3.75rem;
+  border-radius: 50%;
+  object-fit:    cover;
+  flex-shrink:   0;
+  display:       block;
+}
+
+/* Info (layout_S8DMLT: column, center, stretch, gap:4px) */
+.social-card__info {
+  display:        flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:    stretch;
+  align-self:     stretch;
+  gap:            0.25rem;               /* 4px */
+}
+
+/* Platform name (body-question: Manrope Medium 12px, center, white) */
+.social-card__platform {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size:   var(--text-xs);           /* 12px */
+  text-align:  center;
+  color:       var(--color-white);
+}
+
+/* Handle (style_EU6AH3: Manrope Bold 12px, center, #A978FF) */
+.social-card__handle {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size:   var(--text-xs);           /* 12px */
+  text-align:  center;
+  color:       var(--color-purple-primary);
+}
+
+/* ── Contacts Section ────────────────────────────────────────
+   Figma layout_L6NAEG: column, stretch, gap:10px, padding:60px 20px 100px */
+.about-contacts {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  align-self:     stretch;
+  gap:            0.625rem;              /* 10px */
+  padding:        var(--space-15) var(--space-5) var(--space-25); /* 60px 20px 100px */
+}
+
+/* Inner container (layout_J4JWPF: column, center, stretch, gap:40px) */
+.about-contacts__container {
+  display:         flex;
+  flex-direction:  column;
+  justify-content: center;
+  align-items:     center;
+  align-self:      stretch;
+  gap:             var(--space-10);      /* 40px */
+}
+
+/* Contacts header (layout_8SVI32: column, center, stretch, gap:28px) */
+.about-contacts__header {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  align-self:     stretch;
+  gap:            1.75rem;               /* 28px */
+}
+
+/* Contacts description (body-lg center: Manrope Regular 20px, 120%, #000, w:315px) */
+.about-contacts__desc {
+  width:       19.6875rem;              /* 315px */
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-regular);
+  font-size:   var(--text-xl);           /* 20px */
+  line-height: var(--line-height-tight); /* 120% */
+  text-align:  center;
+  color:       var(--color-black);
+}
+
+/* Contact item (layout_67WEHH: column, center, gap:6px) */
+.contact-item {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            0.375rem;              /* 6px */
+}
+
+/* Label (body-md: Manrope Medium 16px, 150%, center, #000) */
+.contact-item__label {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size:   var(--text-base);         /* 16px */
+  line-height: var(--line-height-normal); /* 150% */
+  text-align:  center;
+  color:       var(--color-black);
+}
+
+/* Value link (body-sm: Manrope Regular 14px, center, #7A2EEF) */
+.contact-item__value {
+  font-family:     var(--font-body);
+  font-weight:     var(--font-weight-regular);
+  font-size:       var(--text-sm);       /* 14px */
+  text-align:      center;
+  color:           var(--color-purple-dark);  /* #7A2EEF */
+  text-decoration: none;
+}
+.contact-item__value:hover { text-decoration: underline; }
+
+/* ── About Screen Footer ─────────────────────────────────────
+   Figma layout_NBRPYH: column, stretch, gap:20px, padding:40px 20px 60px, h:350px
+   fill_LRPEMB: #9251FB                                        */
+.about-footer {
+  display:          flex;
+  flex-direction:   column;
+  align-items:      stretch;
+  align-self:       stretch;
+  gap:              var(--space-5);      /* 20px */
+  padding:          var(--space-10) var(--space-5) var(--space-15); /* 40px 20px 60px */
+  min-height:       21.875rem;           /* 350px */
+  background-color: var(--color-purple-accent); /* #9251FB */
+}
+
+/* Nav row (layout_WFF8BP: row, space-between, center, fill×hug) */
+.about-footer__nav {
+  display:         flex;
+  flex-direction:  row;
+  justify-content: space-between;
+  align-items:     center;             /* Figma layout_WFF8BP: alignItems center */
+  align-self:      stretch;
+}
+
+/* Links column (layout_J84FR6: column, gap:4px) */
+.about-footer__links {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.25rem;               /* 4px */
+}
+
+/* Nav link (label-sm: Manrope SemiBold 14px, 100%, white)
+   State-layer padding: 4px 16px — Figma layout_J9QGA2                */
+.about-footer__links a {
+  display:         block;
+  padding:         var(--space-1) var(--space-4); /* 4px 16px — State-layer hit target */
+  font-family:     var(--font-body);
+  font-weight:     var(--font-weight-semibold);
+  font-size:       var(--text-sm);       /* 14px */
+  line-height:     var(--line-height-label); /* 100% */
+  color:           var(--color-white);
+  text-decoration: none;
+  transition:      opacity var(--transition-fast);
+}
+.about-footer__links a:hover { opacity: 0.8; }
+
+/* Footer logo (style_V46IQJ: Unbounded Bold 24px, white
+   layout_LBJ430: column, justify-end, align-end, hug×hug — centred by parent row) */
+.about-footer__logo {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  font-size:   var(--text-2xl);         /* 24px */
+  color:       var(--color-white);
+}
+
+/* Footer bottom (layout_B2CL2G: column, center, stretch, gap:20px) */
+.about-footer__bottom {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  align-self:     stretch;
+  gap:            var(--space-5);        /* 20px */
+}
+
+/* Social icons row (layout_BJPP00: row, center, hug×hug, no gap) */
+.about-footer__social {
+  display:         flex;
+  flex-direction:  row;
+  align-items:     center;
+  justify-content: center;
+  gap:             0;                   /* Figma layout_BJPP00: no gap between buttons */
+}
+
+/* Individual social icon button (layout_8GQI9V: row, center, 40×40px fixed) */
+.about-footer__social-btn {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  flex-shrink:     0;
+  width:           2.5rem;             /* 40px — Figma layout_8GQI9V */
+  height:          2.5rem;             /* 40px — Figma layout_8GQI9V */
+  transition:      opacity var(--transition-fast);
+}
+.about-footer__social-btn:hover { opacity: 0.8; }
+
+/* Icon SVG inside button (layout_9FKFNR: 22×22px icon frame) */
+.about-footer__social-btn svg {
+  display:    block;
+  flex-shrink: 0;
+}
+
+/* Legal block (layout_3IKMXZ: column, center, stretch, gap:4px) */
+.about-footer__legal {
+  display:         flex;
+  flex-direction:  column;
+  justify-content: center;
+  align-items:     center;
+  align-self:      stretch;
+  gap:             0.25rem;              /* 4px */
+}
+
+/* Legal links row (layout_1EIEXF: row, gap:14px) */
+.about-footer__legal-links {
+  display:        flex;
+  flex-direction: row;
+  gap:            0.875rem;              /* 14px */
+}
+
+/* Legal text & links (label-xs: Manrope SemiBold 12px, 100%, white) */
+.about-footer__legal a,
+.about-footer__legal-copy {
+  font-family:     var(--font-body);
+  font-weight:     var(--font-weight-semibold);
+  font-size:       var(--text-xs);       /* 12px */
+  line-height:     var(--line-height-label);
+  color:           var(--color-white);
+  text-decoration: none;
+}
+.about-footer__legal a:hover { text-decoration: underline; }

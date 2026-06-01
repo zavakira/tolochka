@@ -1,0 +1,101 @@
+/* ============================================================
+   Component: Success Toast Notification
+   Figma node 1593:15213 — Notification Container
+   Triggered by either button in #modal-register (Frame 810 / 1593:15951).
+   Backdrop overlay mirrors .join-modal settings (same colour + blur).
+   JS stamps top/height on open; animationend hides both overlay and card.
+   ============================================================ */
+
+/* ── Lifecycle animation ─────────────────────────────────────
+   Total: 4 s
+    0 → 10%  (0 – 0.4 s) — fade in
+   10 → 85%  (0.4 – 3.4 s) — hold at full opacity
+   85 → 100% (3.4 – 4 s)  — fade out                          */
+@keyframes toast-lifecycle {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── Backdrop overlay ────────────────────────────────────────
+   Same pattern as .join-modal — position: absolute so it sits
+   at the user's current scroll position.
+   JS stamps top = screen.scrollTop and height = screen.clientHeight
+   at open time so it covers exactly the visible viewport area.  */
+.toast-overlay {
+  display:                 none;
+  position:                absolute;
+  left:                    0;
+  right:                   0;
+  width:                   100%;
+  max-width:               var(--viewport-mobile);
+  /* top + height set by JS on every open */
+  z-index:                 var(--z-toast);               /* 400              */
+  background-color:        var(--color-modal-backdrop);  /* rgba(13,14,15,.20) */
+  backdrop-filter:         var(--blur-modal);            /* blur(4px)        */
+  -webkit-backdrop-filter: var(--blur-modal);
+}
+
+.toast-overlay--visible {
+  display:   block;
+  animation: toast-lifecycle 4s ease forwards;
+}
+
+/* ── Toast card ──────────────────────────────────────────────
+   position: absolute — centres within the overlay.
+   Figma: row · center · gap 10px · pad 20px 40px · hug · r 20px */
+.toast {
+  position:         absolute;
+  top:              50%;
+  left:             50%;
+  transform:        translate(-50%, -50%);
+
+  display:          none;          /* hidden until .toast--visible added  */
+
+  flex-direction:   row;
+  align-items:      center;
+  justify-content:  center;
+  gap:              0.625rem;         /* 10px — Figma layout_7UIQG5 gap    */
+  padding:          var(--space-5) 2.5rem;  /* 20px 40px — Figma padding  */
+
+  background-color: var(--color-toast-bg);   /* #D7F5E5                   */
+  border-radius:    var(--radius-badge);      /* 20px                      */
+  white-space:      nowrap;
+
+  box-shadow:       var(--shadow-image);
+}
+
+/* ── Visible state ───────────────────────────────────────────
+   JS adds this class; animationend listener removes it.        */
+.toast--visible {
+  display:   flex;
+  animation: toast-lifecycle 4s ease forwards;
+}
+
+/* ── Text — Figma Mobile/Body/body-lg mobile ─────────────────
+   Manrope Regular 400 · 20px · 120% lh · #0D4F2B             */
+.toast__text {
+  font-family: var(--font-body);
+  font-size:   var(--text-xl);              /* 20px               */
+  font-weight: var(--font-weight-regular);  /* 400                */
+  line-height: var(--line-height-tight);    /* 120%               */
+  color:       var(--color-toast-text);     /* #0D4F2B            */
+}
+
+/* ── CheckCircle icon — Figma layout_RENUK9 · 32 × 32 px ────  */
+.toast__icon {
+  display:     block;
+  flex-shrink: 0;
+  width:       2rem;   /* 32px */
+  height:      2rem;
+  color:       var(--color-toast-icon);   /* #008557 */
+}
+
+/* Respect reduced-motion: keep visible, skip animation         */
+@media (prefers-reduced-motion: reduce) {
+  .toast--visible {
+    animation: none;
+    opacity:   1;
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp *)",
+      "mcp__figma__get_figma_data",
+      "mcp__figma__download_figma_images",
+      "PowerShell(Move-Item *)",
+      "PowerShell(python --version; node --version; npx --version 2>$null)",
+      "PowerShell(npm *)",
+      "WebFetch(domain:www.figma.com)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\jsvevuiii\\\\tolochkaa\" -Recurse)",
+      "Bash(Select-Object -Property FullName, PSIsContainer)",
+      "Bash(Sort-Object FullName)",
+      "PowerShell(Copy-Item *)",
+      "Bash(Copy-Item \"C:\\\\Users\\\\jsvevuiii\\\\assets\\\\images\\\\map\\\\map-bg-350d31.png\" \"C:\\\\Users\\\\jsvevuiii\\\\tolochkaa\\\\assets\\\\images\\\\map\\\\map-bg-350d31.png\")",
+      "Bash(Copy-Item \"C:\\\\Users\\\\jsvevuiii\\\\assets\\\\images\\\\map\\\\card-1329-12035.png\" \"C:\\\\Users\\\\jsvevuiii\\\\tolochkaa\\\\assets\\\\images\\\\map\\\\card-1329-12035.png\")",
+      "Bash(Write-Output \"done\")"
+    ]
+  }
+}

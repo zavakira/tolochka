@@ -1,0 +1,366 @@
+/* ============================================================
+   Toloka Screen — "Толоки 375"
+   Figma node 1256:15801
+   Lives inside #screen-container (position:fixed;inset:0).
+   Opens instantly (no animation) on open; instant-off on close.
+   Trigger: #btn-about-tolochyty → .toloka-screen--open (transition.js)
+   ============================================================ */
+
+/* ── Overlay panel ───────────────────────────────────────────── */
+.toloka-screen {
+  display:    none;
+  position:   absolute;
+  top:        0;
+  bottom:     0;
+  left:       max(0px, calc(50% - (var(--viewport-mobile) / 2)));
+  width:      min(var(--viewport-mobile), 100%);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: var(--color-white);
+  -webkit-overflow-scrolling: touch;
+}
+
+/* flex column — consistent layout context with body → .site-header renders identically */
+.toloka-screen--open {
+  display:        flex;
+  flex-direction: column;
+}
+
+/* ── Header — uses shared .site-header from components/header.css ──────────
+   Same markup as Main Mobile, Мапа толок, Про нас. No custom rules needed. */
+
+/* ── Calendar (Figma 1330:16188 — layout_EHT2WR) ────────────────
+   column, center, stretch; gap 20px; padding 10px 20px          */
+.toloka-calendar {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  width:          100%;
+  gap:            var(--space-5);
+  padding:        var(--space-2-5) var(--space-5);
+  box-sizing:     border-box;
+}
+
+/* "Календар подій" — Unbounded Regular 20px UPPER, center */
+.toloka-calendar__title {
+  font-family:    var(--font-heading);
+  font-weight:    var(--font-weight-regular);
+  font-size:      var(--text-xl);
+  text-transform: uppercase;
+  text-align:     center;
+  color:          var(--color-black);
+  margin:         0;
+  line-height:    var(--line-height-label);
+}
+
+/* Month grid (layout_O2PNCI: row wrap, center, gap 8px, w 328px) */
+.toloka-calendar__month {
+  display:        flex;
+  flex-direction: row;
+  flex-wrap:      wrap;
+  align-items:    center;
+  gap:            var(--space-2);
+  width:          20.5rem;    /* 328px */
+}
+
+/* Day chip (layout_SDJSYA: 40×40px, center, bg #D9D9D9, r 25px)
+   Manrope SemiBold 20px, black                                  */
+.toloka-day {
+  display:          flex;
+  align-items:      center;
+  justify-content:  center;
+  flex-shrink:      0;
+  width:            2.5rem;   /* 40px */
+  height:           2.5rem;   /* 40px */
+  border-radius:    var(--radius-day-chip);
+  background-color: var(--color-day-default);
+  border:           1px solid transparent;
+  font-family:      var(--font-body);
+  font-weight:      var(--font-weight-semibold);
+  font-size:        var(--text-xl);
+  color:            var(--color-black);
+}
+
+/* Day 18 — active (fill_Z1NTUM: rgba(146,81,251,0.6)) */
+.toloka-day--active {
+  background-color: var(--color-day-active);
+}
+
+/* Day 24 — today (stroke #9251FB 1px) */
+.toloka-day--today {
+  border-color: var(--color-purple-accent);
+}
+
+/* ── Upcoming Events (Figma 1256:15819 — layout_BNZN30) ─────────
+   column, center, stretch; gap 20px; padding 40px 20px 60px     */
+.toloka-events {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  width:          100%;
+  gap:            var(--space-5);
+  padding:        var(--space-10) var(--space-5) var(--space-15);
+  box-sizing:     border-box;
+}
+
+/* Toolbar (layout_ROQQY7: row, space-between, center, w 335px) */
+.toloka-events__toolbar {
+  display:         flex;
+  flex-direction:  row;
+  justify-content: space-between;
+  align-items:     center;
+  width:           20.9375rem;  /* 335px */
+}
+
+/* Toolbar pill buttons — outline #000, r 32px, padding 8px 16px */
+.toloka-toolbar-btn {
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  gap:              var(--space-2-5);
+  padding:          var(--space-2) var(--space-4);
+  background:       transparent;
+  border:           1.5px solid var(--color-black);
+  border-radius:    var(--radius-btn-toolbar);
+  font-family:      var(--font-body);
+  font-weight:      var(--font-weight-semibold);
+  font-size:        var(--text-sm);
+  line-height:      var(--line-height-label);
+  color:            var(--color-black);
+  cursor:           pointer;
+  white-space:      nowrap;
+}
+
+.toloka-toolbar-btn img {
+  display:     block;
+  flex-shrink: 0;
+}
+
+/* ── Event Card (Figma 1256:15830 — h 546px, r 40px) ────────────
+   column, space-between, stretch; padding 20px                   */
+.toloka-event-card {
+  position:         relative;
+  display:          flex;
+  flex-direction:   column;
+  justify-content:  space-between;
+  width:            100%;
+  height:           34.125rem;    /* 546px */
+  border-radius:    var(--radius-card);
+  padding:          var(--space-5);
+  box-sizing:       border-box;
+  overflow:         hidden;
+}
+
+/* Background image — fills card absolutely, blurred */
+.toloka-event-card__image-wrap {
+  position:      absolute;
+  inset:         0;
+  border-radius: var(--radius-card);
+  overflow:      hidden;
+}
+
+.toloka-event-card__img {
+  display:    block;
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+  filter:     var(--blur-card);
+}
+
+/* Shadow gradient overlay (fill_OXNE8O) + drop-shadow */
+.toloka-event-card__shadow {
+  position:         absolute;
+  inset:            0;
+  background-image: var(--gradient-card-overlay);
+  box-shadow:       var(--shadow-image);
+}
+
+/* Top row: badges (layout_IITK21: row, space-between, stretch) */
+.toloka-event-card__top {
+  position:        relative;
+  display:         flex;
+  flex-direction:  row;
+  justify-content: space-between;
+  width:           100%;
+}
+
+/* Badges container (layout_5X2NH9: row wrap, center, gap 6px, w 240px) */
+.toloka-event-card__badges {
+  display:        flex;
+  flex-direction: row;
+  flex-wrap:      wrap;
+  align-items:    center;
+  gap:            var(--space-1-5);
+  width:          15rem;    /* 240px */
+}
+
+/* Single badge (layout_UIB7MO: row, center, gap 6px, padding 4px 10px, r 20px, bg #FFF) */
+.toloka-event-badge {
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  gap:              var(--space-1-5);
+  padding:          var(--space-1) var(--space-2-5);
+  background-color: var(--color-white);
+  border-radius:    var(--radius-badge);
+  font-family:      var(--font-body);
+  font-weight:      var(--font-weight-semibold);
+  font-size:        var(--text-sm);
+  line-height:      var(--line-height-card);
+  color:            var(--color-purple-accent);
+}
+
+.toloka-event-badge img {
+  display:     block;
+  flex-shrink: 0;
+}
+
+/* Info panel (layout_QI83D5: column, stretch, gap 24px; backdrop blur 3.5px) */
+.toloka-event-card__info {
+  position:        relative;
+  display:         flex;
+  flex-direction:  column;
+  align-items:     stretch;
+  gap:             var(--space-6);
+  backdrop-filter: var(--blur-info);
+}
+
+/* Event name — Manrope Bold 24px, 120% lh, white */
+.toloka-event-card__name {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size:   var(--text-2xl);
+  line-height: var(--line-height-tight);
+  color:       var(--color-white);
+  margin:      0;
+}
+
+/* Location row (layout_USKGW1: row, center, stretch, gap 12px) */
+.toloka-event-card__location {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-3);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size:   var(--text-base);
+  line-height: var(--line-height-snug);
+  color:       var(--color-white);
+  margin:      0;
+}
+
+.toloka-event-card__location img {
+  display:     block;
+  flex-shrink: 0;
+}
+
+/* "доєднатися" button — fill #A978FF, pill, Manrope SemiBold 16px UPPER */
+.toloka-event-card__join {
+  display:          flex;
+  align-items:      center;
+  justify-content:  center;
+  width:            100%;
+  padding:          var(--space-4) var(--space-20);
+  background-color: var(--color-purple-primary);
+  border:           none;
+  border-radius:    var(--radius-pill);
+  font-family:      var(--font-body);
+  font-weight:      var(--font-weight-semibold);
+  font-size:        var(--text-base);
+  line-height:      var(--line-height-label);
+  text-transform:   uppercase;
+  color:            var(--color-white);
+  cursor:           pointer;
+  box-sizing:       border-box;
+}
+
+/* Pagination (layout_X5DLUQ: row, center, gap 10px) */
+.toloka-pagination {
+  display:        flex;
+  flex-direction: row;
+  align-items:    center;
+  gap:            var(--space-2-5);
+}
+
+.toloka-pagination__dot {
+  border-radius:    var(--radius-pagination);
+  background-color: var(--color-purple-pagination);
+  flex-shrink:      0;
+}
+
+/* Active dot: 30×8px (layout_W9F9ZJ) */
+.toloka-pagination__dot--active {
+  width:  1.875rem;   /* 30px */
+  height: 0.5rem;     /*  8px */
+}
+
+/* Inactive dot: 8×8px (layout_01KJNT) */
+.toloka-pagination__dot--inactive {
+  width:  0.5rem;   /* 8px */
+  height: 0.5rem;   /* 8px */
+}
+
+/* ── Map section (Figma 1256:15893 — layout_1W43YR) ─────────────
+   column, center, stretch; gap 20px; padding 60px 0             */
+.toloka-map-section {
+  display:         flex;
+  flex-direction:  column;
+  justify-content: center;
+  width:           100%;
+  gap:             var(--space-5);
+  padding:         var(--space-15) 0;
+  box-sizing:      border-box;
+}
+
+/* Map header (layout_K3VPP9: row, space-between, center, stretch, px 20px) */
+.toloka-map-section__header {
+  display:         flex;
+  flex-direction:  row;
+  justify-content: space-between;
+  align-items:     center;
+  width:           100%;
+  padding:         0 var(--space-5);
+  box-sizing:      border-box;
+}
+
+/* "мапа" heading — Unbounded Regular 20px UPPER */
+.toloka-map-section__title {
+  font-family:    var(--font-heading);
+  font-weight:    var(--font-weight-regular);
+  font-size:      var(--text-xl);
+  text-transform: uppercase;
+  color:          var(--color-black);
+  margin:         0;
+  line-height:    var(--line-height-label);
+}
+
+/* Map button (Figma 1593:14217 — full 56×56 SVG carries its own border + icon)
+   Wrapper provides only the interactive affordance; visual comes from inline SVG. */
+.toloka-map-btn {
+  display:    inline-flex;
+  background: transparent;
+  border:     none;
+  padding:    0;
+  cursor:     pointer;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.toloka-map-btn svg {
+  display: block;
+}
+
+/* Map content (layout_PRKCBR: h 400px, overflow hidden) */
+.toloka-map-section__content {
+  width:    100%;
+  height:   25rem;    /* 400px */
+  overflow: hidden;
+}
+
+/* Map image — fills container, crop from top */
+.toloka-map-section__img {
+  display:          block;
+  width:            100%;
+  height:           100%;
+  object-fit:       cover;
+  object-position:  center top;
+}

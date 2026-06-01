@@ -1,0 +1,16 @@
+# Dependencies (installed by Claude for screenshot verification — not part of project)
+node_modules/
+package.json
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Temp / build output
+*.log
+dist/

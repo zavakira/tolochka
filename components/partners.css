@@ -1,0 +1,75 @@
+/* ============================================================
+   Component: Partners Section
+   Figma node 1261:4745 — Partners
+   Layout: column · center · padding 40px 20px · gap 40px
+   Background: #BAD342 (--color-accent / green)
+   ============================================================ */
+
+.partners {
+  background-color: var(--color-accent);           /* #BAD342 */
+  padding: var(--space-10) var(--space-5);          /* 40px 20px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-10);                             /* 40px */
+  max-width: var(--viewport-mobile);
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* ── Section heading ─────────────────────────────────────────
+   Figma node 1261:4746 — Title
+   Unbounded · Regular 400 · 20px · UPPER · #0D0E0F           */
+.partners-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);                        /* 20px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+  text-align: center;                               /* Figma: textAlignHorizontal CENTER */
+  color: var(--color-text);
+}
+
+/* ── Partner list ────────────────────────────────────────────
+   Figma node 1261:4747 — Partner List
+   row · wrap · center · gap 12px                             */
+.partners-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);                              /* 12px */
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ── Single partner logo item ────────────────────────────────
+   Figma nodes 1261:4748 / 4751 / 4754 / 4757 — Logo ipsum
+   row · center · gap ~8px · padding ~3.2px                   */
+.partner-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);                              /* 8px */
+  padding: var(--space-1);                          /* 4px ≈ 3.2px */
+}
+
+/* SVG logo icon — ~24px square · black fill */
+.partner-logo img {
+  width: 1.5rem;                                    /* 24px */
+  height: 1.5rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* ── Partner name ────────────────────────────────────────────
+   Figma nodes 1261:4750 / 4753 / 4756 / 4759 — Partner Name
+   Manrope · SemiBold 600 · 18.4px ≈ --text-lg · #0D0E0F     */
+.partner-name {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);                        /* 18px ≈ 18.4px */
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-label);
+  color: var(--color-text);
+  white-space: nowrap;
+}

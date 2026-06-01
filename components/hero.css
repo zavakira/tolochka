@@ -1,0 +1,68 @@
+/* ============================================================
+   Component: Hero Section
+   Figma node 1261:4688 — Hero
+   Layout: column · center · gap 20px
+   Padding: 40px top · 20px horizontal · 20px bottom
+   ============================================================ */
+
+.hero {
+  padding: var(--space-10) var(--space-5) var(--space-5);  /* 40px 20px 20px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);                                      /* 20px */
+  background-color: var(--color-bg);
+  max-width: var(--viewport-mobile);
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* ── Hero composite image ────────────────────────────────────
+   Figma node 1519:5257 — hero container · 335×335px RECTANGLE
+   Single PNG replaces the former CSS 2×2 four-cell grid.
+   width:100% fills the .hero content area (375px − 2×20px = 335px);
+   aspect-ratio:1/1 locks height = width → always a perfect square.
+   ─────────────────────────────────────────────────────────── */
+.hero-mosaic {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+/* ── Headline card ───────────────────────────────────────────
+   Figma node 1261:4691 — Hero text container
+   White bg · radius 20px · padding 12px · column · gap 10px
+   ─────────────────────────────────────────────────────────── */
+.hero-text {
+  width: 100%;
+  background-color: var(--color-white);
+  border-radius: var(--radius-badge);                        /* 20px */
+  padding: var(--space-5) var(--space-3);                    /* 20px 12px */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2-5);                                     /* 10px */
+}
+
+/* Main heading
+   Figma node 1261:4693
+   Unbounded · Medium 500 · 30px · 120% · UPPER · center · #0D0E0F */
+.hero-heading {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);                                /* 30px */
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);                     /* 120% */
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-text);
+}
+
+/* ── CTA button override ─────────────────────────────────────
+   Figma node 1261:5399 — Button-Primary "Толочити"
+   Padding: 16px 80px · reuses .btn.btn--primary from header.css
+   ─────────────────────────────────────────────────────────── */
+.hero-cta {
+  padding-block: var(--space-4);                             /* 16px */
+  padding-inline: var(--space-20);                           /* 80px */
+  font-size: var(--text-base);                               /* 16px */
+}

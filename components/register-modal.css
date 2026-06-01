@@ -1,0 +1,236 @@
+/* ============================================================
+   Component: Registration Modal
+   Figma node 1593:15939 — Notification Container (registration)
+
+   Two usages:
+   1. Inside #screen-map: backdrop via .join-modal (position:absolute).
+   2. CTA banner (#modal-cta-register): .cta-register-modal overlay
+      (position:fixed, body-level, above all screens).
+   ============================================================ */
+
+/* ── CTA registration overlay — body-level, position:fixed ──
+   Appears above header (z:100) and screen-container (z:300).  */
+.cta-register-modal {
+  display:    none;
+  position:   fixed;
+  top:        0;
+  bottom:     0;
+  left:       max(0px, calc(50% - (var(--viewport-mobile) / 2)));
+  width:      min(var(--viewport-mobile), 100%);
+  z-index:    400;
+  background-color:        var(--color-modal-backdrop);
+  backdrop-filter:         var(--blur-modal);
+  -webkit-backdrop-filter: var(--blur-modal);
+}
+
+.cta-register-modal--open {
+  display: block;
+}
+
+/* ── Card ────────────────────────────────────────────────────
+   Figma: 335×599 fixed · white · r 20px · col · center
+   gap 16px · pad 20px
+   max-height + overflow-y: auto handles viewports shorter than card */
+.register-modal__card {
+  position:         absolute;
+  top:              50%;
+  left:             50%;
+  transform:        translate(-50%, -50%);    /* centres card both axes */
+  width:            calc(var(--viewport-mobile) - var(--space-5) * 2); /* 335px */
+  max-height:       90%;
+  overflow-y:       auto;
+  background-color: var(--color-white);
+  border-radius:    var(--radius-badge);      /* 20px */
+  display:          flex;
+  flex-direction:   column;
+  align-items:      center;
+  gap:              var(--space-4);           /* 16px — layout_64GI9Y gap */
+  padding:          var(--space-5);           /* 20px — layout_64GI9Y pad */
+}
+
+/* ── × Close button ──────────────────────────────────────────
+   Figma node 1593:15941 — layout_H2WLMO: absolute · x:279 y:0
+   56px wide (layout_9IW539)                                   */
+.register-modal__close {
+  position:        absolute;
+  top:             0;
+  right:           0;
+  width:           3.5rem;         /* 56px */
+  height:          3.5rem;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  background:      transparent;
+  border:          none;
+  cursor:          pointer;
+  padding:         0;
+  color:           var(--color-text);
+}
+
+.register-modal__close svg {
+  display:     block;
+  flex-shrink: 0;
+}
+
+.register-modal__close:focus-visible {
+  outline:        2px solid var(--color-purple-dark);
+  outline-offset: 2px;
+  border-radius:  50%;
+}
+
+/* ── Title ───────────────────────────────────────────────────
+   Figma 1593:15940 — Mobile/Headings/h1 mobile
+   Unbounded Regular 400 · 20px · UPPER · centre · width 244px */
+.register-modal__title {
+  width:          15.25rem;                    /* 244px */
+  font-family:    var(--font-heading);
+  font-size:      var(--text-xl);              /* 20px */
+  font-weight:    var(--font-weight-regular);
+  line-height:    var(--line-height-tight);    /* 120% */
+  text-transform: uppercase;
+  text-align:     center;
+  color:          var(--color-text);
+}
+
+/* ── Form container ──────────────────────────────────────────
+   Figma Frame 812 — layout_WXPRP4: col · center · gap 32px    */
+.register-form {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-8);   /* 32px */
+  width:          100%;
+}
+
+/* ── Inputs group ────────────────────────────────────────────
+   Figma Frame 811 — layout_M547UX: col · gap 16px             */
+.register-inputs {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-4);   /* 16px */
+  align-self:     stretch;
+}
+
+/* ── Single input field ──────────────────────────────────────
+   Figma input component — layout_YHD84K: col · gap 4px        */
+.register-input {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-1);   /* 4px */
+}
+
+/* Label — Mobile/Body/body-md mobile: Manrope Medium 500 · 16px · 150% */
+.register-input__label {
+  font-family: var(--font-body);
+  font-size:   var(--text-base);           /* 16px */
+  font-weight: var(--font-weight-medium);  /* 500 */
+  line-height: var(--line-height-normal);  /* 150% */
+  color:       var(--color-text);          /* #000000 */
+}
+
+/* Textbox wrapper — layout_IMYRVY: row · fill · pad 10px · gap 10px
+   White bg · 1px #A6A6A6 stroke · r 4px                       */
+.register-input__textbox {
+  display:          flex;
+  align-items:      center;
+  gap:              var(--space-2-5);        /* 10px */
+  padding:          var(--space-2-5);        /* 10px */
+  background-color: var(--color-white);
+  border:           1px solid var(--color-gray-input);  /* #A6A6A6 */
+  border-radius:    var(--radius-input);     /* 4px */
+}
+
+.register-input__textbox:focus-within {
+  border-color: var(--color-purple-primary); /* highlight on focus */
+  outline:      none;
+}
+
+/* Input field — fills textbox width */
+.register-input__field {
+  flex:        1;
+  border:      none;
+  outline:     none;
+  background:  transparent;
+  font-family: var(--font-body);
+  font-size:   var(--text-sm);              /* 14px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color:       var(--color-text);
+  min-width:   0;   /* prevent flex overflow */
+}
+
+.register-input__field::placeholder {
+  color: var(--color-gray-input);   /* #A6A6A6 */
+}
+
+/* ── Agreement row ───────────────────────────────────────────
+   Figma 1593:15948 — total 281px wide
+   Checkbox (Square) 32×32 at x:0 · text starts at x:37       */
+.register-agreement {
+  display:     flex;
+  align-items: flex-start;
+  gap:         var(--space-1);   /* 4px ≈ Figma 5px gap (x:37 − 32px checkbox) */
+  align-self:  stretch;
+}
+
+/* Checkbox — styled to Figma's Square component 32×32px */
+.register-agreement__input {
+  width:        2rem;     /* 32px — layout_PIO5ER */
+  height:       2rem;
+  flex-shrink:  0;
+  cursor:       pointer;
+  accent-color: var(--color-purple-primary);  /* #A978FF */
+}
+
+/* Agreement text — Mobile/Body/body-question: Manrope Medium 500 · 12px · #9251FB */
+.register-agreement__text {
+  font-family: var(--font-body);
+  font-size:   var(--text-xs);              /* 12px */
+  font-weight: var(--font-weight-medium);   /* 500 */
+  line-height: var(--line-height-tight);    /* 120% */
+  color:       var(--color-purple-accent);  /* #9251FB */
+  cursor:      pointer;
+}
+
+/* ── Button group ────────────────────────────────────────────
+   Figma Frame 810 — layout_OO7UNB: col · stretch · gap 12px   */
+.register-btns {
+  display:        flex;
+  flex-direction: column;
+  align-items:    stretch;
+  align-self:     stretch;
+  gap:            var(--space-3);   /* 12px */
+}
+
+/* Both buttons — layout_3OLYZK: fill · pad 12px 24px · r 32px
+   fill_SE08UK #A978FF · white text · Manrope SemiBold 600 · 16px UPPER */
+.register-btn {
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  background-color: var(--color-purple-primary);   /* #A978FF */
+  border:           1.5px solid var(--color-purple-primary);
+  border-radius:    var(--radius-btn-toolbar);      /* 32px */
+  padding-block:    var(--space-3);                 /* 12px */
+  padding-inline:   var(--space-6);                 /* 24px */
+  font-family:      var(--font-body);
+  font-size:        var(--text-base);               /* 16px */
+  font-weight:      var(--font-weight-semibold);    /* 600 */
+  line-height:      var(--line-height-label);       /* 100% */
+  text-transform:   uppercase;
+  letter-spacing:   var(--letter-spacing-normal);
+  color:            var(--color-white);
+  cursor:           pointer;
+}
+
+.register-btn:hover {
+  opacity: 0.85;
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .register-modal__card {
+    transition: none;
+    animation:  none;
+  }
+}

@@ -1,0 +1,166 @@
+/* ============================================================
+   Component: Join Confirmation Modal
+   Figma node 1593:15559 — Main Container
+   Triggered by #btn-tolochyty ("толочити") in .map-event-header.
+   Overlay is fixed relative to #screen-map because the map screen
+   has a CSS transform — this creates the containing block for all
+   position:fixed descendants, so inset:0 covers the map area only.
+   ============================================================ */
+
+/* ── Backdrop overlay ────────────────────────────────────────
+   position: absolute so the overlay sits at the user's current
+   scroll position, not locked to the viewport top.
+   JS stamps `top` = screen.scrollTop and `height` = screen.clientHeight
+   at open time so it covers exactly the visible viewport area.
+   backdrop-filter blurs the content rendered behind the overlay. */
+.join-modal {
+  display:                 none;
+  position:                absolute;   /* follows scroll, not viewport */
+  left:                    0;
+  right:                   0;
+  width:                   100%;
+  max-width:               var(--viewport-mobile);      /* explicit 375px cap      */
+  /* top + height set by JS on every open */
+  z-index:                 var(--z-toast);              /* 400 — above map content */
+  background-color:        var(--color-modal-backdrop); /* rgba(13,14,15,0.20)     */
+  backdrop-filter:         var(--blur-modal);           /* blur(4px)               */
+  -webkit-backdrop-filter: var(--blur-modal);
+}
+
+.join-modal--open {
+  display: block;
+}
+
+/* ── Notification card ───────────────────────────────────────
+   Figma node 1593:15560 — layout_GAQTU1
+   335px wide · 20px left margin · white · r 20px
+   Column · center · gap 16px · padding 20px
+   Vertically centred in the overlay (50% + translateY −50%)    */
+.join-modal__card {
+  position:         absolute;
+  top:              50%;
+  left:             var(--space-5);           /* 20px — Figma x:20              */
+  transform:        translateY(-50%);
+  /* 375px frame − 20px left − 20px right = 335px */
+  width:            calc(var(--viewport-mobile) - var(--space-5) * 2);
+  background-color: var(--color-white);
+  border-radius:    var(--radius-badge);      /* 20px — Figma borderRadius 20px */
+  display:          flex;
+  flex-direction:   column;
+  align-items:      center;
+  gap:              var(--space-4);           /* 16px — Figma layout_GAQTU1 gap */
+  padding:          var(--space-5);           /* 20px — Figma layout_GAQTU1 pad */
+}
+
+/* ── × Close button ──────────────────────────────────────────
+   Figma node 1593:15564 — layout_L1IS26
+   position: absolute · x:279 y:0 within card (top-right)
+   layout_05C62C: column · 56px wide                           */
+.join-modal__close {
+  position:        absolute;
+  top:             0;
+  right:           0;
+  width:           3.5rem;          /* 56px — layout_05C62C width */
+  height:          3.5rem;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  background:      transparent;
+  border:          none;
+  cursor:          pointer;
+  padding:         0;
+  color:           var(--color-text);
+}
+
+.join-modal__close svg {
+  display:     block;
+  flex-shrink: 0;
+}
+
+.join-modal__close:focus-visible {
+  outline:        2px solid var(--color-purple-dark);
+  outline-offset: 2px;
+  border-radius:  50%;
+}
+
+/* ── Title ───────────────────────────────────────────────────
+   Figma node 1593:15561 — Mobile/Headings/h1 mobile
+   Unbounded Regular 400 · 20px · UPPER · centre · #000000
+   fixed width 244px (layout_LMABZR)                           */
+.join-modal__title {
+  width:          15.25rem;                   /* 244px — layout_LMABZR         */
+  font-family:    var(--font-heading);
+  font-size:      var(--text-xl);             /* 20px                          */
+  font-weight:    var(--font-weight-regular); /* 400                           */
+  line-height:    var(--line-height-tight);   /* 120%                          */
+  text-transform: uppercase;
+  text-align:     center;
+  color:          var(--color-text);
+}
+
+/* ── Primary CTA — Увійти / зареєструватися ─────────────────
+   Figma node 1593:15978 — State-layer state=Default size=large
+   fill #A978FF · white text · fill width · pad 16px 80px · r 32px
+   Desktop/Label Special/special-md: Manrope SemiBold 600 · 16px · UPPER */
+.join-modal__btn-register {
+  align-self:       stretch;
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  background-color: var(--color-purple-primary);   /* #A978FF */
+  border:           1.5px solid var(--color-purple-primary);
+  border-radius:    var(--radius-btn-toolbar);     /* 32px */
+  padding-block:    var(--space-4);                /* 16px */
+  padding-inline:   var(--space-5);                /* 20px — reduced from Figma's 80px;
+                                                      80px leaves only 135px for text in the
+                                                      295px card context, causing overflow   */
+  font-family:      var(--font-body);
+  font-size:        var(--text-base);              /* 16px */
+  font-weight:      var(--font-weight-semibold);   /* 600  */
+  line-height:      var(--line-height-label);      /* 100% */
+  text-transform:   uppercase;
+  letter-spacing:   var(--letter-spacing-normal);
+  color:            var(--color-white);
+  cursor:           pointer;
+}
+
+.join-modal__btn-register:hover {
+  opacity: 0.85;
+}
+
+/* ── Secondary CTA — Взяти участь без реєстрації ────────────
+   Figma node 1593:15981 — State-layer state=enable size=medium
+   transparent bg · 1.5px #0D0E0F stroke · fill width
+   pad 12px 24px · r 32px
+   Desktop/Label/label-md: Manrope SemiBold 600 · 16px         */
+.join-modal__btn-guest {
+  align-self:       stretch;
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  background-color: transparent;
+  border:           1.5px solid var(--color-text);   /* #0D0E0F */
+  border-radius:    var(--radius-btn-toolbar);        /* 32px */
+  padding-block:    var(--space-3);                   /* 12px */
+  padding-inline:   var(--space-6);                   /* 24px */
+  font-family:      var(--font-body);
+  font-size:        var(--text-base);                 /* 16px */
+  font-weight:      var(--font-weight-semibold);      /* 600  */
+  line-height:      var(--line-height-label);         /* 100% */
+  letter-spacing:   var(--letter-spacing-normal);
+  color:            var(--color-text);
+  cursor:           pointer;
+}
+
+.join-modal__btn-guest:hover {
+  background-color: var(--state-hover);
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .join-modal,
+  .join-modal__card {
+    transition: none;
+    animation:  none;
+  }
+}

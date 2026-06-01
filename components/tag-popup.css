@@ -1,0 +1,83 @@
+/* ============================================================
+   Component: Tag Popup (Tags Tooltip)
+   Figma: node 1471:13840 "Tags Popup" (componentSetId 1471:13688)
+   Triggered by: hover / focus-within on .map-member-tag
+   ============================================================ */
+
+/* ── Popup container ──────────────────────────────────────────
+   layout_D83E74: column · stretch · padding 8px · w 209px · hug
+   fill_YRPUP0: #EAE8FF
+   borderRadius: 8px 0px 8px 8px  (top-right = 0 → connects to tag)
+   Positioned: absolute · top 100% · right 0
+   Hidden by default; revealed on hover / focus-within          */
+.tag-popup {
+  display:          none;
+  flex-direction:   column;
+  align-items:      stretch;
+
+  position:         absolute;
+  top:              100%;               /* sits directly below the tag circle */
+  right:            0;                  /* top-right 0-radius aligns with tag edge */
+  z-index:          var(--z-dropdown);  /* 100 — above member rows */
+
+  width:            13.0625rem;         /* 209px — Figma layout_D83E74 */
+  padding:          var(--space-2);     /* 8px */
+  background-color: var(--color-tag-popup-bg);   /* #EAE8FF */
+  border-radius:    var(--radius-sm) 0 var(--radius-sm) var(--radius-sm);
+                                        /* 8px 0 8px 8px — top-right 0 */
+  /* Subtle shadow so popup reads above the member list */
+  box-shadow:       0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+/* Show on hover or keyboard focus within the tag wrapper */
+.map-member-tag:hover        .tag-popup,
+.map-member-tag:focus-within .tag-popup {
+  display: flex;
+}
+
+/* ── Tags wrap ────────────────────────────────────────────────
+   layout_TFV302: row · flex-end · wrap · gap 2px · fill        */
+.tag-popup__wrap {
+  display:         flex;
+  flex-direction:  row;
+  justify-content: flex-end;
+  flex-wrap:       wrap;
+  gap:             var(--space-0-5);    /* 2px — Figma layout_TFV302 */
+}
+
+/* ── Individual tag chip ──────────────────────────────────────
+   layout_ZLZ9M1: row · center · padding 2px 4px · r 4px
+   style_LFRPIK: Manrope Medium 12px · lh 12px · black          */
+.tag-chip {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         var(--space-0-5) var(--space-1); /* 2px 4px */
+  border-radius:   var(--radius-xs);               /* 4px */
+  font-family:     var(--font-body);
+  font-size:       var(--text-xs);                 /* 12px */
+  font-weight:     var(--font-weight-medium);
+  line-height:     1;
+  color:           var(--color-black);
+  white-space:     nowrap;
+}
+
+/* Match=Yes — highlighted chip (fill_9LPWL7: #BBB1FF) */
+.tag-chip--match {
+  background-color: var(--color-purple-pagination); /* #BBB1FF */
+}
+
+/* Match=No — plain chip, no fill */
+.tag-chip--no-match {
+  background-color: transparent;
+}
+
+/* ── Tag wrapper: make it interactable ───────────────────────
+   The .map-member-tag div must accept focus for keyboard users */
+.map-member-tag[tabindex] {
+  cursor: pointer;
+}
+.map-member-tag:focus-visible {
+  outline:        2px solid var(--color-purple-primary);
+  outline-offset: 2px;
+}

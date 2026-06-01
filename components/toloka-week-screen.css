@@ -1,0 +1,258 @@
+/* ============================================================
+   Component: Toloka Week Screen — "Толоки 375 Тиждень"
+   Figma node 1921:15307
+   Opened by hero "Толочити" button (Figma 1922:14168).
+   Reuses toloka-screen.css classes for event card, toolbar,
+   pagination, map section, and footer.
+   ============================================================ */
+
+/* ── Screen container ──────────────────────────────────────── */
+.toloka-week-screen {
+  display:             none;
+  position:            absolute;
+  top:                 0;
+  bottom:              0;
+  left:                max(0px, calc(50% - (var(--viewport-mobile) / 2)));
+  width:               min(var(--viewport-mobile), 100%);
+  overflow-y:          auto;
+  overscroll-behavior: contain;
+  background-color:    var(--color-white);
+  -webkit-overflow-scrolling: touch;
+}
+
+.toloka-week-screen--open {
+  display:        flex;
+  flex-direction: column;
+}
+
+/* ── Calendar section ──────────────────────────────────────── */
+.tw-calendar {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  align-self:     stretch;
+  gap:            var(--space-7);     /* 28px — Figma 1921:15309 */
+  padding:        var(--space-5) var(--space-5) var(--space-15); /* 20px 20px 60px */
+}
+
+/* Title + period buttons — 335px column, gap 28px */
+.tw-calendar__inner {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-7);     /* 28px */
+  width:          calc(var(--viewport-mobile) - 2 * var(--space-5)); /* 335px */
+}
+
+/* "Календар подій" — Unbounded Regular 20px UPPER center */
+.tw-calendar__title {
+  font-family:    var(--font-heading);
+  font-weight:    var(--font-weight-regular);
+  font-size:      var(--text-xl);     /* 20px */
+  text-transform: uppercase;
+  text-align:     center;
+  color:          var(--color-text);
+  margin:         0;
+}
+
+/* Period selector row — space-between, full width */
+.tw-period-row {
+  display:         flex;
+  justify-content: space-between;
+  align-items:     center;
+  align-self:      stretch;
+}
+
+/* Left group: Тиждень + Місяць — gap 8px */
+.tw-period-group {
+  display: flex;
+  gap:     var(--space-2);           /* 8px */
+}
+
+/* Period pill — Manrope SemiBold 14px · outline · r 32px · pad 8px 16px */
+.tw-period-btn {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         var(--space-2) var(--space-4);  /* 8px 16px */
+  background:      transparent;
+  border:          1.5px solid var(--color-text);
+  border-radius:   var(--radius-btn-toolbar);      /* 32px */
+  font-family:     var(--font-body);
+  font-weight:     var(--font-weight-semibold);
+  font-size:       var(--text-sm);                 /* 14px */
+  line-height:     var(--line-height-label);
+  color:           var(--color-text);
+  cursor:          pointer;
+  transition:      background-color var(--transition-fast);
+}
+
+.tw-period-btn--active {
+  background-color: var(--Action-quantery-black-pressed); /* rgba(13,14,15,0.2) */
+}
+
+/* ── Week wrapper — column, center, gap 20px ───────────────── */
+.tw-week-wrap {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-5);    /* 20px */
+}
+
+/* Week row — 7 cells, center, gap 8px, 328px wide */
+.tw-week-row {
+  display:         flex;
+  justify-content: center;
+  gap:             var(--space-2);   /* 8px */
+  width:           20.5rem;         /* 328px */
+}
+
+/* Day cell — column, center, gap 4px, 40px wide */
+.tw-day {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-1);    /* 4px */
+  width:          2.5rem;           /* 40px */
+}
+
+/* Day circle — column, center, gap 2px, padding 12px 0, r 25px, h 70px */
+.tw-day__circle {
+  display:          flex;
+  flex-direction:   column;
+  justify-content:  center;
+  align-items:      center;
+  gap:              0.125rem;        /* 2px */
+  padding:          0.75rem 0;       /* 12px 0 */
+  width:            2.5rem;          /* 40px */
+  height:           4.375rem;        /* 70px — Figma layout_1SM2ZN */
+  background-color: var(--color-day-circle-bg);  /* #F5F6F6 */
+  border:           1.5px solid var(--color-disabled-bg); /* #CDD2D4 */
+  border-radius:    1.5625rem;       /* 25px */
+}
+
+/* Today — BBB1FF fill, no border */
+.tw-day__circle--today {
+  background-color: var(--color-purple-pagination); /* #BBB1FF */
+  border-color:     transparent;
+}
+
+/* Selected — purple stroke */
+.tw-day__circle--selected {
+  border-color: var(--color-purple-primary); /* #A978FF */
+}
+
+/* Day name — Manrope SemiBold 12px center */
+.tw-day__name {
+  font-family:  var(--font-body);
+  font-weight:  var(--font-weight-semibold);
+  font-size:    var(--text-xs);      /* 12px */
+  line-height:  var(--line-height-label);
+  text-align:   center;
+  color:        var(--color-text);
+}
+
+/* Date number — Manrope SemiBold 20px center */
+.tw-day__num {
+  font-family:  var(--font-body);
+  font-weight:  var(--font-weight-semibold);
+  font-size:    var(--text-xl);      /* 20px */
+  line-height:  var(--line-height-tight);
+  text-align:   center;
+  color:        var(--color-text);
+}
+
+/* Event indicator dot — 4×4 purple circle below the day circle */
+.tw-day__dot {
+  display:          block;
+  width:            0.25rem;         /* 4px */
+  height:           0.25rem;         /* 4px */
+  border-radius:    50%;
+  background-color: var(--color-purple-primary); /* #A978FF */
+  flex-shrink:      0;
+}
+
+/* ── Week pagination — gray first dot (past week, disabled) ─── */
+.toloka-week-screen .toloka-pagination__dot--gray {
+  background-color: var(--color-disabled-bg); /* #CDD2D4 */
+}
+
+/* ── Month container (Figma 1921:15306) ────────────────────────
+   Same outer shape as .tw-week-wrap — column, center, gap 20px */
+.tw-month-wrap {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-5);    /* 20px */
+}
+
+/* 30-cell wrap grid — row wrap, gap 8px, 328px wide
+   7 × 40px + 6 × 8px = 328px exactly                           */
+.tw-month-grid {
+  display:    flex;
+  flex-wrap:  wrap;
+  gap:        var(--space-2);        /* 8px */
+  width:      20.5rem;              /* 328px */
+}
+
+/* Day cell — column, center, gap 4px, 40×53px                  */
+.tw-month-day {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-1);    /* 4px */
+  width:          2.5rem;           /* 40px */
+  height:         3.3125rem;        /* 53px */
+}
+
+/* Day circle — column, center, 40×40px, r 25px, no padding     */
+.tw-month-day__circle {
+  display:          flex;
+  flex-direction:   column;
+  justify-content:  center;
+  align-items:      center;
+  width:            2.5rem;          /* 40px */
+  height:           2.5rem;          /* 40px */
+  background-color: var(--color-day-circle-bg);   /* #F5F6F6 default */
+  border:           1.5px solid var(--color-disabled-bg); /* #CDD2D4 */
+  border-radius:    1.5625rem;       /* 25px */
+  flex-shrink:      0;
+}
+
+/* Disabled — past days (1–17) */
+.tw-month-day__circle--disabled {
+  background-color: var(--color-day-disabled-bg); /* #E4E7E9 */
+  border-color:     var(--color-disabled-bg);      /* #CDD2D4 */
+}
+
+/* Today (day 18) — lavender fill, no border */
+.tw-month-day__circle--today {
+  background-color: var(--color-purple-pagination); /* #BBB1FF */
+  border-color:     transparent;
+}
+
+/* Selected (days 20–24) — purple stroke */
+.tw-month-day__circle--selected {
+  border-color: var(--color-purple-primary); /* #A978FF */
+}
+
+/* Day number — Manrope SemiBold 20px center */
+.tw-month-day__num {
+  font-family:  var(--font-body);
+  font-weight:  var(--font-weight-semibold);
+  font-size:    var(--text-xl);      /* 20px */
+  line-height:  var(--line-height-tight);
+  text-align:   center;
+  color:        var(--color-text);
+}
+
+/* Disabled day number — muted color */
+.tw-month-day__circle--disabled + * ,
+.tw-month-day__circle--disabled .tw-month-day__num {
+  color: var(--color-disabled-fg);   /* #A9B2B7 */
+}
+
+/* Selector to colour the number inside a disabled circle        */
+.tw-month-day__circle--disabled > .tw-month-day__num {
+  color: var(--color-disabled-fg);
+}

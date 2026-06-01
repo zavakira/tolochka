@@ -1,0 +1,141 @@
+/* ============================================================
+   Component: About Us Section
+   Figma node 1261:4724 — About Us
+   Layout: column · padding 100px 20px · gap 40px · white bg
+   ============================================================ */
+
+.about {
+  padding: var(--space-25) var(--space-5);        /* 100px 20px */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);                            /* 40px */
+  background-color: var(--color-bg);
+  max-width: var(--viewport-mobile);
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* ── About project sub-block ────────────────────────────────
+   Figma node 1261:4725 — About project
+   column · gap 24px
+   ─────────────────────────────────────────────────────────── */
+.about-project {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);                             /* 24px */
+}
+
+/* ── Heading row ─────────────────────────────────────────────
+   Figma node 1261:4726 — Heading
+   row · space-between · center
+   ─────────────────────────────────────────────────────────── */
+.about-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Section title — "про проєкт"
+   Figma node 1261:4727
+   Unbounded · Regular 400 · 20px · UPPER · #0D0E0F           */
+.about-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);                       /* 20px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* Circular outline icon button
+   Figma node 1593:16725 — State-layer, layout_229P9U
+   56×56px · 1.5px border · borderRadius 32px                  */
+.about-icon-btn {
+  width:  var(--size-cta-icon-btn);                /* 56px */
+  height: var(--size-cta-icon-btn);                /* 56px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-pill);               /* 100px */
+  background-color: transparent;
+  color: var(--color-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              color             var(--transition-fast);
+}
+.about-icon-btn:hover {
+  background-color: var(--color-text);
+  color: var(--color-white);
+  opacity: 1;
+}
+.about-icon-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* ── Body text ───────────────────────────────────────────────
+   Figma node 1261:4729 — About project text
+   Manrope · Medium 500 · 16px · 150% lh · #0D0E0F            */
+.about-text {
+  font-family: var(--font-body);
+  font-size: var(--text-base);                     /* 16px */
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);          /* 150% */
+  color: var(--color-text);
+}
+
+/* ── Stats grid ──────────────────────────────────────────────
+   Figma node 1261:4730 — Stat Item
+   column · gap 20px
+   ─────────────────────────────────────────────────────────── */
+.about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);                             /* 20px */
+}
+
+/* Stat row — row · center · gap 32px
+   Figma nodes 1261:4731 "Bottom row" / 1261:4738 "Top row"   */
+.about-stats__row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-8);                             /* 32px */
+}
+
+/* ── Single stat item ────────────────────────────────────────
+   Figma node 1261:4732 / 4735 / 4739 / 4742 — Number
+   column · center · gap 8px · 150px wide
+   ─────────────────────────────────────────────────────────── */
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);                             /* 8px */
+  width: 9.375rem;                                 /* 150px */
+}
+
+/* Stat number — Unbounded · Regular 400 · 36px · UPPER
+   Figma: "645+" "760+" "150+" "10"                            */
+.stat__number {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);                      /* 36px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* Stat label — Manrope · Regular 400 · 14px · center
+   Figma: "волонтерських годин" "учасників" etc.               */
+.stat__label {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);                       /* 14px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  color: var(--color-text);
+}

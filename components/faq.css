@@ -1,0 +1,175 @@
+/* ============================================================
+   Component: FAQ Section
+   Figma node 1261:4860 — FAQ
+   column · padding 60px 20px · gap 20px
+   Native <details>/<summary> accordion — no JS required
+   ============================================================ */
+
+/* ── Outer section ───────────────────────────────────────────
+   column · padding 60px 20px · gap 20px                      */
+.faq {
+  background-color: var(--color-bg);
+  padding: var(--space-15) var(--space-5);  /* 60px 20px */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);                      /* 20px */
+  max-width: var(--viewport-mobile);
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* ── Section title ───────────────────────────────────────────
+   Figma node 1261:4861 — "Вас часто цікавить:"
+   Unbounded · Medium 500 · 24px · 120% lh · -4% ls          */
+.faq-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);              /* 24px */
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);   /* 120% */
+  letter-spacing: var(--letter-spacing-tight); /* -0.04em */
+  color: var(--color-text);
+}
+
+/* ── FAQ image ────────────────────────────────────────────────
+   Figma node 1261:4866 — 317×315px · radius 20px             */
+.faq-image {
+  width: 100%;
+  border-radius: var(--radius-badge);      /* 20px */
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.faq-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* ── Accordion list ──────────────────────────────────────────
+   column · gap 8px                                            */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);                     /* 8px */
+}
+
+/* ── Accordion item — native <details> ───────────────────────
+   1px border #0D0E0F · radius 20px                           */
+.faq-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-badge);      /* 20px */
+  overflow: hidden;
+}
+
+/* ── Summary (question row) ──────────────────────────────────
+   row · space-between · gap 12px · padding 20px
+   Manrope · Bold 700 · 14px · 120% lh                        */
+.faq-item summary {
+  list-style: none;                        /* remove UA marker */
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);                     /* 12px */
+  padding: var(--space-5);                 /* 20px */
+  font-family: var(--font-body);
+  font-size: var(--text-sm);              /* 14px */
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);  /* 120% */
+  color: var(--color-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Remove Safari's default triangle */
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ── Caret icon ──────────────────────────────────────────────
+   24×24 · rotates 180° when open                             */
+.faq-item__caret {
+  width: 1.5rem;                           /* 24px */
+  height: 1.5rem;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
+}
+
+.faq-item[open] > summary .faq-item__caret {
+  transform: rotate(180deg);
+}
+
+/* ── Answer body ─────────────────────────────────────────────
+   Figma: Mobile/Body/body-question — Manrope · Medium 500 · 12px · 150% lh
+   padding: 0 20px 20px (top handled by summary padding)      */
+.faq-item__answer {
+  padding: 0 var(--space-5) var(--space-5); /* 0 20px 20px */
+  font-family: var(--font-body);
+  font-size: var(--text-xs);              /* 12px — Figma body-question */
+  font-weight: var(--font-weight-medium); /* 500  — Figma body-question */
+  line-height: var(--line-height-normal); /* 150% */
+  color: var(--color-text);
+}
+
+/* ── CTA row ──────────────────────────────────────────────────
+   Figma node 1261:4874 — column · center · gap 8px           */
+.faq-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);                     /* 8px */
+  text-align: center;
+}
+
+/* "Не знайшов відповідь на своє питання?"
+   Manrope · Regular 400 · 14px · #0D0E0F                     */
+.faq-cta__text {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);              /* 14px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+}
+
+/* "Запитай нас" — outline rounded button
+   Figma node 1593:13772 — State-layer · state=enable · size=medium
+   padding 12px 24px · radius 32px · 1.5px border
+   label-md: Manrope SemiBold 600 · 16px · 100% lh · gap 8px  */
+.faq-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);                     /* 8px */
+  padding: var(--space-3) var(--space-6);  /* 12px 24px */
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-btn-event);  /* 32px */
+  font-family: var(--font-body);
+  font-size: var(--text-base);             /* 16px — label-md */
+  font-weight: var(--font-weight-semibold);/* 600 */
+  line-height: var(--line-height-label);   /* 1 = 100% */
+  color: var(--color-text);
+  text-decoration: none;
+  background-color: transparent;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+/* State layer interactions — Figma node 1075:1557 */
+.faq-cta__btn:hover       { background-color: var(--state-hover);   /* 10% tint — text stays dark */ }
+.faq-cta__btn:active      { background-color: var(--state-pressed);  /* 20% tint */ }
+.faq-cta__btn:focus-visible {
+  background-color: var(--state-focused);
+  outline: 2px solid var(--color-border);
+  outline-offset: 2px;
+}
+.faq-cta__btn[disabled],
+.faq-cta__btn:disabled {
+  background-color: var(--color-disabled-bg);              /* #CDD2D4 */
+  color:            var(--color-disabled-fg);              /* #A9B2B7 */
+  border-color:     var(--color-disabled-bg);
+  cursor:           not-allowed;
+  pointer-events:   none;
+}

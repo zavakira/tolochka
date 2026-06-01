@@ -1,0 +1,247 @@
+/* ============================================================
+   Component: Reviews Section
+   Figma node 1261:4775 — Reviews
+   Outer: column · padding 60px 0 · relative for bg images
+   Inner: column · center · padding 40px 20px · gap 40px
+   ============================================================ */
+
+/* ── Outer section ───────────────────────────────────────────
+   Figma node 1261:4775 — Reviews
+   padding 60px 0 · position relative to contain bg images   */
+.reviews {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-15) 0;              /* 60px 0 */
+  background-color: var(--color-bg);
+}
+
+/* ── Decorative background images ────────────────────────────
+   Figma nodes 1261:4777 / 1261:4778 — bg image (absolute)
+   Left:  x=-92, y=359 · Right: x=227, y=159
+   Same imageRef — mirrored placement                         */
+.reviews-bg__img {
+  position: absolute;
+  width: 15.0625rem;                       /* 241px */
+  height: 22.625rem;                       /* 362px */
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.reviews-bg__img--left {
+  left: -5.75rem;                          /* x ≈ -92px */
+  bottom: 0;                               /* y ≈ 359 from top of section */
+}
+
+.reviews-bg__img--right {
+  right: -1rem;                            /* x ≈ 227px from left → ~right edge */
+  top: 9.95rem;                            /* y ≈ 159px */
+}
+
+/* ── Inner content container ─────────────────────────────────
+   Figma node 1261:4776 — ReviewsSection
+   column · center · gap 40px · padding 40px 20px            */
+.reviews-inner {
+  position: relative;
+  z-index: var(--z-raised);               /* above bg images */
+  max-width: var(--viewport-mobile);
+  margin-inline: auto;
+  padding: var(--space-10) var(--space-5); /* 40px 20px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-10);                    /* 40px */
+  width: 100%;
+}
+
+/* ── Review content wrapper ──────────────────────────────────
+   Figma node 1261:4779 — Review Content
+   column · center · gap 24px                                 */
+.reviews-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);                     /* 24px */
+  width: 100%;
+}
+
+/* ── Section title ───────────────────────────────────────────
+   Figma node 1261:4780 — Reviews title
+   Unbounded · Regular 400 · 20px · UPPER · CENTER · #0D0E0F
+   sizing: fill → stretches to parent width                   */
+.reviews-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);              /* 20px */
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+  text-align: center;                     /* Figma: textAlignHorizontal CENTER */
+  color: var(--color-text);
+}
+
+/* ── Review card ─────────────────────────────────────────────
+   Figma node 1261:4781 — ReviewCard
+   white bg · 1px border #0D0E0F · radius 20px
+   column · gap 40px · padding 40px 20px                      */
+.review-card {
+  width: 100%;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-badge);     /* 20px */
+  padding: var(--space-10) var(--space-5);/* 40px 20px */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);                   /* 40px */
+}
+
+/* ── User block ──────────────────────────────────────────────
+   Figma node 1261:4782 — UserBlock
+   row · align start · gap 20px                               */
+.review-card__user {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);                    /* 20px */
+}
+
+/* Avatar circle — 60×60 · radius 30px · red bg #B84242
+   Figma node 1261:4783                                       */
+.review-card__avatar {
+  width: 3.75rem;                         /* 60px */
+  height: 3.75rem;
+  border-radius: var(--radius-avatar);    /* 30px */
+  background-color: var(--color-red-avatar); /* #B84242 */
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.review-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* User info column
+   Figma node 1261:4785 — UserBlock (inner)
+   column · stretch · gap 4px                                 */
+.review-card__user-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);                    /* 4px */
+  flex: 1;
+  min-width: 0;
+}
+
+/* Info sub-block — column · gap 8px
+   Figma node 1261:4786 — Info                                */
+.review-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);                    /* 8px */
+}
+
+/* Reviewer name
+   Figma node 1261:4788
+   Manrope · Bold 700 · 16px · #0D0E0F                        */
+.review-card__name {
+  font-family: var(--font-body);
+  font-size: var(--text-base);            /* 16px */
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+}
+
+/* Reviewer details — toloka ref + district
+   Figma node 1261:4789
+   Manrope · Medium 500 · 14px · #0D0E0F                      */
+.review-card__details {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);              /* 14px */
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+}
+
+/* Rating row: stars + date
+   Figma node 1261:4790 — Review rating
+   row · center · gap 6px                                     */
+.review-card__rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);                  /* 6px */
+  margin-top: var(--space-1);            /* 4px separation */
+}
+
+.review-card__rating img {
+  height: 1rem;
+  width: auto;
+  flex-shrink: 0;
+}
+
+/* Review date
+   Figma node 1261:4797
+   Manrope · Medium 500 · 12px · right-aligned · #0D0E0F     */
+.review-card__date {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);              /* 12px */
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  margin-left: auto;
+}
+
+/* ── Review text ─────────────────────────────────────────────
+   Figma node 1261:4798
+   Manrope · SemiBold 600 · 14px · 120% lh · center          */
+.review-card__text {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);              /* 14px */
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);  /* 120% */
+  color: var(--color-text);
+  text-align: center;
+}
+
+/* ── Pagination ──────────────────────────────────────────────
+   Figma node 1261:4799 — Pagination Container
+   row · center · gap 10px
+   All dots: rgba(13,14,15,0.4) — active wider (30×8)        */
+.reviews-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2-5);                  /* 10px */
+}
+
+.reviews-pagination__dot {
+  height: 0.5rem;                         /* 8px */
+  width: 0.5rem;
+  border-radius: var(--radius-pagination); /* 19px */
+  background-color: var(--color-pagination-inactive); /* rgba(13,14,15,0.4) */
+  transition: width var(--transition-fast);
+  flex-shrink: 0;
+}
+
+/* Active dot — 30×8px · same fill
+   Figma node 1261:4800                                       */
+.reviews-pagination__dot--active {
+  width: 1.875rem;                        /* 30px */
+}
+
+/* ── Image gallery ───────────────────────────────────────────
+   Figma node 1261:4805 / 1261:4806 — Image Gallery / Back
+   335×250 · radius 20px · gray bg #D7D7D7                   */
+.review-card__gallery {
+  width: 100%;
+  height: 15.625rem;                      /* 250px */
+  border-radius: var(--radius-badge);     /* 20px */
+  background-color: var(--color-gray-light); /* #D7D7D7 */
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.review-card__gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

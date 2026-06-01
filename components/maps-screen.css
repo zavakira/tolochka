@@ -1,0 +1,240 @@
+/* ============================================================
+   Component: Maps Screen — "Мапа толок 375"
+   Figma node 1256:15438
+   Opened by "Мапа толок" link in the nav dropdown.
+   Closing: Escape key or nav dropdown navigation.
+   Layout: flex column — header · main content (721px) · footer
+   ============================================================ */
+
+/* ── Screen container ─────────────────────────────────────── */
+.maps-screen {
+  display:             none;
+  position:            absolute;
+  top:                 0;
+  bottom:              0;
+  left:                max(0px, calc(50% - (var(--viewport-mobile) / 2)));
+  width:               min(var(--viewport-mobile), 100%);  /* 375px centred */
+  overflow-y:          auto;
+  overscroll-behavior: contain;
+  background-color:    var(--color-bg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.maps-screen--open {
+  display:        flex;
+  flex-direction: column;
+}
+
+/* ── Main Content (Figma 1256:15483) ─────────────────────────
+   fill × 721px fixed height; all children absolute.           */
+.maps-screen__content {
+  position:    relative;
+  width:       100%;
+  height:      45.0625rem;  /* 721px */
+  flex-shrink: 0;
+  overflow:    hidden;
+}
+
+/* Map background — 375×721, fills entire content area        */
+.maps-screen__bg {
+  position:        absolute;
+  inset:           0;
+  width:           100%;
+  height:          100%;
+  object-fit:      cover;
+  object-position: center;
+  display:         block;
+  z-index:         var(--z-base);
+}
+
+/* Filter toolbar (Figma 1256:15654) — absolute at y=21
+   row · gap 4px · padding-inline 20px                        */
+.maps-screen__toolbar {
+  position:       absolute;
+  top:            1.3125rem;           /* 21px — Figma y=21 */
+  left:           0;
+  right:          0;
+  z-index:        var(--z-raised);
+  display:        flex;
+  align-items:    center;
+  gap:            var(--space-1);      /* 4px */
+  padding-inline: var(--space-5);      /* 20px */
+}
+
+/* ── Card+FAB container (Figma layout_6OL63A) ───────────────
+   Absolute at x=109, y=502 · column · align-end · gap 8px.
+   In-flow children: Crosshair btn + FAB wrap.
+   Action buttons are absolute inside FAB wrap — never push anything. */
+.maps-card-fab {
+  position:       absolute;
+  left:           6.8125rem;    /* 109px */
+  top:            31.375rem;    /* 502px */
+  width:          15.3125rem;   /* 245px */
+  display:        flex;
+  flex-direction: column;
+  align-items:    flex-end;
+  gap:            var(--space-2);  /* 8px */
+  z-index:        var(--z-raised);
+}
+
+/* Crosshair / location button (Figma 1593:14358)
+   Styled identically to map toolbar buttons              */
+.maps-crosshair-btn {
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  padding:          var(--space-3) var(--space-6);  /* 12px 24px */
+  background-color: var(--color-white);
+  border:           1.5px solid var(--color-black);
+  border-radius:    var(--radius-btn-toolbar);      /* 32px */
+  cursor:           pointer;
+  transition:       background-color var(--transition-fast);
+}
+.maps-crosshair-btn:hover {
+  background-color: var(--Action-quantery-black-hover);
+}
+.maps-crosshair-btn img {
+  display:     block;
+  flex-shrink: 0;
+}
+
+/* Wrapper for Plus FAB + absolute action buttons.
+   position:relative anchors action buttons to the Plus top. */
+.maps-fab-wrap {
+  position: relative;
+}
+
+/* Action buttons (Figma 1933:5943) — absolute below FAB, animate in from below */
+.maps-fab-actions {
+  position:       absolute;
+  top:            calc(3.5rem + 0.5rem); /* 56px FAB + 8px gap */
+  right:          0;
+  display:        flex;
+  flex-direction: column;
+  align-items:    flex-end;
+  gap:            var(--space-1-5);      /* 6px */
+  /* Hidden: shifted down 10px + transparent + non-interactive */
+  opacity:        0;
+  transform:      translateY(0.625rem);  /* 10px below final position */
+  pointer-events: none;
+  transition:     opacity 220ms ease-out, transform 220ms ease-out;
+}
+
+/* Open: slide up into place + fade in */
+.maps-fab-actions--open {
+  opacity:        1;
+  transform:      translateY(0);
+  pointer-events: auto;
+}
+
+/* Action button (Figma 1922:14174 / 1922:14170)
+   fill #7A2EEF · r 32px · 12px 24px · SemiBold 16px UPPER white */
+.maps-fab-action-btn {
+  background-color: var(--color-purple-dark);     /* #7A2EEF */
+  color:            var(--color-white);
+  border:           none;
+  border-radius:    var(--radius-btn-toolbar);    /* 32px */
+  padding:          var(--space-3) var(--space-6); /* 12px 24px */
+  font-family:      var(--font-body);
+  font-size:        var(--text-base);             /* 16px */
+  font-weight:      var(--font-weight-semibold);
+  line-height:      var(--line-height-label);     /* 100% */
+  text-transform:   uppercase;
+  letter-spacing:   var(--letter-spacing-normal);
+  white-space:      nowrap;
+  cursor:           pointer;
+  transition:       background-color var(--transition-fast);
+}
+.maps-fab-action-btn:hover {
+  background-color: var(--color-purple-accent);   /* #9251FB */
+}
+
+/* FAB trigger (Figma 1922:14212 / 1922:14207) — 56×56 · #7A2EEF circle
+   margin-left:auto right-aligns it within the 245px container block. */
+.maps-fab {
+  width:            3.5rem;                       /* 56px */
+  height:           3.5rem;                       /* 56px */
+  border-radius:    var(--radius-pill);           /* full circle */
+  background-color: var(--color-purple-dark);     /* #7A2EEF */
+  border:           none;
+  display:          flex;
+  align-items:      center;
+  justify-content:  center;
+  cursor:           pointer;
+  flex-shrink:      0;
+  transition:       background-color var(--transition-fast);
+}
+.maps-fab:hover {
+  background-color: var(--color-purple-accent);   /* #9251FB */
+}
+.maps-fab svg {
+  display:     block;
+  flex-shrink: 0;
+}
+
+/* ── Calendar popup (Figma 1967:6699) ────────────────────────
+   Opened by CalendarBlank button (Figma 1593:14297).
+   stampOverlay: top + height set by JS to match visible
+   viewport area of #screen-maps (accounts for scroll).        */
+.maps-calendar-overlay {
+  display:          none;
+  position:         absolute;
+  left:             0;
+  right:            0;
+  /* top + height injected by JS on open */
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index:          var(--z-sticky);   /* 200 — above toolbar (z-raised:10) and dropdown (100) */
+}
+
+.maps-calendar-overlay--open {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+}
+
+/* White popup card (Figma layout_4TKNDG: 348px · r 20px · padding 20px · gap 40px) */
+.maps-calendar-popup {
+  display:          flex;
+  flex-direction:   column;
+  align-items:      stretch;
+  gap:              var(--space-10);     /* 40px */
+  padding:          var(--space-5);      /* 20px */
+  width:            21.75rem;            /* 348px */
+  background-color: var(--color-white);
+  border-radius:    var(--radius-badge); /* 20px */
+}
+
+/* Header section (Figma 1967:6554): title centered */
+.maps-calendar-popup__header {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-7);   /* 28px */
+  align-self:     stretch;
+}
+
+/* "КАЛЕНДАР ПОДІЙ" — Unbounded Regular 20px uppercase */
+.maps-calendar-popup__title {
+  font-family:    var(--font-heading);
+  font-weight:    var(--font-weight-regular); /* 400 */
+  font-size:      var(--text-xl);             /* 20px */
+  text-transform: uppercase;
+  text-align:     center;
+  color:          var(--color-text);
+  margin:         0;
+}
+
+/* Week + pagination container (Figma 1967:6561) */
+.maps-calendar-popup__week-wrap {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-5);   /* 20px */
+  align-self:     stretch;
+}
+
+/* Gray pagination dot — scoped to this popup
+   (.toloka-week-screen scope doesn't reach here)              */
+.maps-calendar-overlay .toloka-pagination__dot--gray {
+  background-color: var(--color-disabled-bg); /* #CDD2D4 */
+}

@@ -1,0 +1,720 @@
+/* ============================================================
+   Component: Map Full Screen — "Мапа толок (вибрана толока) 375"
+   Figma node 1092:14419
+   Opened by #btn-toloka-map (toloka screen) or #btn-map-calendar (map screen).
+   Closing returns to whichever screen opened it.
+   Layout: flex column — header · content (425px map + toolbar)
+           · event info article · footer
+   ============================================================ */
+
+/* ── Screen container ─────────────────────────────────────── */
+.map-full-screen {
+  display:             none;
+  position:            absolute;
+  top:                 0;
+  bottom:              0;
+  left:                max(0px, calc(50% - (var(--viewport-mobile) / 2)));
+  width:               min(var(--viewport-mobile), 100%);
+  overflow-y:          auto;
+  overscroll-behavior: contain;
+  background-color:    var(--color-bg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.map-full-screen--open {
+  display:        flex;
+  flex-direction: column;
+}
+
+/* ── Main Content (Figma 1678:5807) ─────────────────────────
+   375×425 — absolute-layout frame; map bg fills it,
+   toolbar is absolutely positioned at top:10px.               */
+.map-full-content {
+  position:    relative;
+  width:       100%;                            /* explicit — flex child must not collapse */
+  align-self:  stretch;                         /* fill flex container cross-axis          */
+  height:      var(--size-map-content-h);       /* 26.5625rem / 425px                     */
+  min-height:  var(--size-map-content-h);       /* guard against any collapse             */
+  flex-shrink: 0;
+  overflow:    hidden;
+  background-color: var(--color-gray-light);    /* fallback if image fails to load        */
+}
+
+/* Map background — absolutely positioned, fills entire Content */
+.map-full-content__bg {
+  position:        absolute;
+  inset:           0;
+  width:           100%;
+  height:          100%;
+  object-fit:      cover;
+  object-position: center;
+  display:         block;
+  z-index:         var(--z-base);
+}
+
+/* ── Filter toolbar (Figma 1678:5809) ───────────────────────
+   Row · gap 4px · padding-inline 20px
+   Absolute at y=10 (Content padding-top) inside .map-full-content. */
+.map-full-toolbar {
+  position:       absolute;
+  top:            0.625rem;                  /* 10px — Figma layout_UE4QIK padding-top */
+  left:           0;
+  right:          0;
+  z-index:        var(--z-raised);           /* 10 — above map bg image    */
+  display:        flex;
+  align-items:    center;
+  gap:            var(--space-1);            /* 4px                         */
+  padding-inline: var(--space-5);            /* 20px                        */
+}
+
+/* ── Card Container (Figma 1329:12035) ───────────────────────
+   IMAGE-SVG · absolute at x=109, y=502 · 245px wide           */
+.map-full-card {
+  position: absolute;
+  left:     6.8125rem;    /* 109px */
+  top:      31.375rem;    /* 502px */
+  width:    15.3125rem;   /* 245px */
+  display:  block;
+}
+
+/* Icon-only buttons — funnel (left) + calendar (right)
+   Figma 1678:5810 / 1678:5812 — pre-rendered 72×48 SVGs; no CSS border needed.
+   Using <img> preserves exact Figma dimensions (CSS border adds 3px to auto-sized elements). */
+.map-full-toolbar__icon-btn {
+  background: none;
+  border:     none;
+  padding:    0;
+  cursor:     pointer;
+  flex-shrink: 0;
+  line-height: 0;           /* collapse any inline spacing around the img   */
+}
+.map-full-toolbar__icon-btn img {
+  display: block;
+  width:   4.5rem;          /* 72px — matches Figma 1678:5810 / 5812        */
+  height:  3rem;            /* 48px                                          */
+}
+
+/* Dropdown wrapper — position:relative so panel can be absolute */
+.map-full-toolbar__district-wrap {
+  position: relative;
+  flex:     1;
+}
+
+/* District dropdown trigger (Figma 1678:5811)
+   row · fill parent · r 32px · 12px 24px · gap 8px · stroke
+   box-shadow replaces border so the button stays exactly 48px tall
+   (CSS border on auto-sized elements adds to total dimensions; box-shadow does not). */
+.map-full-toolbar__dropdown {
+  display:          flex;
+  align-items:      center;
+  justify-content:  center;
+  width:            100%;
+  border-radius:    var(--radius-btn-toolbar);     /* 32px → pill           */
+  border:           none;
+  box-shadow:       0 0 0 1.5px var(--color-text); /* 1.5px stroke, no layout impact */
+  padding:          var(--space-3) var(--space-6);  /* 12px 24px            */
+  gap:              var(--space-2);                 /* 8px                  */
+  font-family:      var(--font-body);
+  font-size:        var(--text-base);               /* 16px                 */
+  font-weight:      var(--font-weight-semibold);    /* 600                  */
+  line-height:      var(--line-height-label);       /* 100%                 */
+  color:            var(--color-text);
+  text-transform:   none;
+  background-color: var(--color-white);
+  cursor:           pointer;
+}
+.map-full-toolbar__dropdown:hover,
+.map-full-toolbar__dropdown:active,
+.map-full-toolbar__dropdown:focus,
+.map-full-toolbar__dropdown:focus-visible {
+  background-color: var(--color-white);
+  outline:          none;
+}
+.map-full-toolbar__dropdown img,
+.map-full-toolbar__dropdown svg {
+  display:     block;
+  flex-shrink: 0;
+  width:       1.5rem;    /* 24px — CaretDoubleDown icon (layout_VY01DP)   */
+  height:      1.5rem;    /* 24px                                           */
+}
+
+/* ── District dropdown panel (Figma 1678:5813) ───────────────
+   178px wide · white bg · 1px border · r 20px · shadow
+   Absolutely positioned below the district button.            */
+.map-full-dropdown {
+  position:         absolute;
+  top:              calc(100% + var(--space-1));  /* 4px gap below button   */
+  left:             0;
+  width:            var(--map-full-dropdown-w);   /* 178px                  */
+  background-color: var(--color-white);
+  border:           1px solid var(--color-text);  /* #0D0E0F                */
+  border-radius:    var(--radius-badge);          /* 20px                   */
+  box-shadow:       var(--shadow-dropdown);       /* 0 4px 8px rgba(0,0,0,0.15) */
+  padding:          var(--space-3) var(--space-5); /* 12px 20px             */
+  display:          none;
+  flex-direction:   column;
+  gap:              var(--space-4);               /* 16px between options   */
+  z-index:          var(--z-dropdown);            /* 100                    */
+  transform-origin: top center;
+}
+
+.map-full-dropdown--open {
+  display:   flex;
+  animation: map-full-dropdown-expand 220ms ease-out forwards;
+}
+
+.map-full-dropdown--closing {
+  display:   flex;
+  animation: map-full-dropdown-collapse 180ms ease-in forwards;
+}
+
+@keyframes map-full-dropdown-expand {
+  from {
+    opacity:   0;
+    transform: translateY(-6px) scaleY(0.88);
+  }
+  to {
+    opacity:   1;
+    transform: translateY(0)    scaleY(1);
+  }
+}
+
+@keyframes map-full-dropdown-collapse {
+  from {
+    opacity:   1;
+    transform: translateY(0)    scaleY(1);
+  }
+  to {
+    opacity:   0;
+    transform: translateY(-6px) scaleY(0.88);
+  }
+}
+
+/* Option buttons — Manrope Medium 12px #404040 */
+.map-full-dropdown__option {
+  font-family:  var(--font-body);
+  font-size:    var(--text-xs);             /* 12px                          */
+  font-weight:  var(--font-weight-medium);  /* 500                           */
+  color:        var(--color-false-black);   /* #404040                       */
+  background:   transparent;
+  border:       none;
+  padding:      0;
+  cursor:       pointer;
+  text-align:   left;
+  line-height:  var(--line-height-tight);   /* 120%                          */
+  transition:   color var(--transition-fast);
+}
+.map-full-dropdown__option:hover {
+  color: var(--color-purple-primary);       /* #A978FF                       */
+}
+
+/* ── Event Info article (Figma 1256:15408) ───────────────────
+   White card · border-radius 20px 20px 0 0 · column
+   Directly below Content section; no own horizontal padding
+   (each sub-section carries its own padding).                 */
+.map-full-event {
+  background-color: var(--color-white);
+  border-radius:    var(--radius-badge) var(--radius-badge) 0 0;  /* 20px 20px 0 0 */
+  display:          flex;
+  flex-direction:   column;
+  width:            100%;
+}
+
+/* ── a) Event Header (Figma 1669:13541) ─────────────────────
+   Column · center · gap 28px · padding 20px                  */
+.map-full-event__header {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-7);    /* 28px — Figma layout_X6G71O */
+  padding:        var(--space-5);    /* 20px */
+}
+
+/* Subtitle bar — 60×8px · #BBB1FF pill (Figma 1669:13542) */
+.map-full-event__subtitle-bar {
+  width:            var(--size-avatar-lg);          /* 60px                 */
+  height:           var(--space-2);                 /*  8px                 */
+  background-color: var(--color-purple-pagination); /* #BBB1FF              */
+  border-radius:    var(--radius-pill);
+  flex-shrink:      0;
+}
+
+/* Badges row — Manrope 500 14px 120% · gap 10px */
+.map-full-event__badges {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-2-5);   /* 10px */
+}
+
+.map-full-event__badge {
+  display:     inline-flex;
+  align-items: center;
+  gap:         var(--space-1-5);         /* 6px — icon + text            */
+  font-family: var(--font-body);
+  font-size:   var(--text-sm);           /* 14px                         */
+  font-weight: var(--font-weight-medium); /* 500                         */
+  line-height: var(--line-height-tight); /* 120%                         */
+}
+
+.map-full-event__badge img {
+  display:     block;
+  flex-shrink: 0;
+}
+
+.map-full-event__badge--status {
+  color: var(--color-purple-accent);   /* #9251FB — Заплановано          */
+}
+
+.map-full-event__badge--id {
+  color: var(--color-purple-vivid);    /* #8A38F5 — #1328                */
+}
+
+/* Event title — Unbounded 400 20px uppercase · center */
+.map-full-event__title {
+  font-family:    var(--font-heading);
+  font-size:      var(--text-xl);           /* 20px                       */
+  font-weight:    var(--font-weight-regular); /* 400                      */
+  line-height:    var(--line-height-tight);  /* 120%                      */
+  text-transform: uppercase;
+  text-align:     center;
+  color:          var(--color-text);
+  margin:         0;
+}
+
+/* Action row — full width button  */
+.map-full-event__action-row {
+  width:   100%;
+  display: flex;
+}
+
+/* "толочити" CTA — full width · #7A2EEF bg · white text */
+.map-full-event__btn-join {
+  flex:             1;
+  background-color: var(--color-purple-dark);   /* #7A2EEF               */
+  color:            var(--color-white);
+  padding:          var(--space-4) var(--space-20); /* 16px 80px          */
+  border-radius:    var(--radius-pill);
+  font-family:      var(--font-body);
+  font-size:        var(--text-base);           /* 16px                   */
+  font-weight:      var(--font-weight-semibold); /* 600                   */
+  line-height:      var(--line-height-label);   /* 100%                   */
+  text-transform:   lowercase;
+  border:           none;
+  cursor:           pointer;
+  transition:       background-color var(--transition-fast);
+}
+.map-full-event__btn-join:hover {
+  background-color: var(--color-purple-accent); /* #9251FB                */
+}
+.map-full-event__btn-join:active {
+  background-color: var(--color-purple-vivid);  /* #8A38F5                */
+}
+
+/* ── b) Event Image (Figma 1256:15223) ──────────────────────
+   Wrap: padding 20px 0 · img: h 266px · object-fit:cover     */
+.map-full-event__img-wrap {
+  padding: var(--space-5) 0;    /* 20px top + bottom, no horizontal       */
+}
+
+.map-full-event__img {
+  display:    block;
+  width:      100%;
+  height:     var(--size-event-img-h);   /* 266px — Figma layout_PC6HF5  */
+  object-fit: cover;
+}
+
+/* ── c) Event Description (Figma 1102:14412) ────────────────
+   Column · gap 20px · padding 20px                           */
+.map-full-event__desc {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-5);   /* 20px */
+  padding:        var(--space-5);   /* 20px */
+}
+
+/* Body text — Manrope 400 20px 120% */
+.map-full-event__desc-text {
+  font-family: var(--font-body);
+  font-size:   var(--text-xl);             /* 20px                         */
+  font-weight: var(--font-weight-regular); /* 400                          */
+  line-height: var(--line-height-tight);   /* 120%                         */
+  color:       var(--color-text);
+  margin:      0;
+}
+
+/* Divider — rgba(0,0,0,0.2) stroke (Figma Vector 42) */
+.map-full-event__divider {
+  border:     none;
+  border-top: 1px solid var(--color-divider);  /* rgba(0,0,0,0.2)          */
+  margin:     0;
+}
+
+/* Info rows list — column · gap 20px · padding 20px 0 */
+.map-full-event__info-list {
+  list-style:     none;
+  margin:         0;
+  padding:        var(--space-5) 0;  /* 20px top/bottom, no horizontal     */
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-5);    /* 20px                               */
+}
+
+/* Info row — row · gap 10px · align-items flex-start */
+.map-full-event__info-row {
+  display:     flex;
+  align-items: flex-start;
+  gap:         var(--space-2-5);         /* 10px                           */
+  font-family: var(--font-body);
+  font-size:   var(--text-sm);           /* 14px                           */
+  font-weight: var(--font-weight-regular); /* 400                          */
+  line-height: var(--line-height-tight); /* 120%                           */
+  color:       var(--color-text);
+}
+
+.map-full-event__info-row img {
+  flex-shrink: 0;
+}
+
+/* ── d) Links section (Figma 1102:14411) ─────────────────────
+   Column · gap 10px · padding 20px 0                         */
+.map-full-event__links {
+  list-style:     none;
+  margin:         0;
+  padding:        var(--space-5) 0;  /* 20px top/bottom                    */
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-2-5);  /* 10px — between rows                */
+}
+
+/* Link row — row · gap 10px · horizontal padding 20px */
+.map-full-event__link-row {
+  display:         flex;
+  align-items:     center;
+  gap:             var(--space-2-5);  /* 10px                              */
+  padding-inline:  var(--space-5);    /* 20px horizontal inset             */
+}
+
+.map-full-event__link-row img {
+  flex-shrink: 0;
+}
+
+/* Link text — Manrope 500 14px · #8A38F5 underlined */
+.map-full-event__link-text {
+  font-family:          var(--font-body);
+  font-size:            var(--text-sm);            /* 14px                 */
+  font-weight:          var(--font-weight-medium); /* 500                  */
+  line-height:          var(--line-height-tight);  /* 120%                 */
+  color:                var(--color-purple-vivid); /* #8A38F5              */
+  text-decoration:      underline;
+  text-underline-offset: var(--space-0-5);
+}
+.map-full-event__link-text:hover {
+  color: var(--color-purple-primary);  /* #A978FF                          */
+}
+
+/* ── e) Participants block (Figma 1102:15031) ────────────────
+   Column · gap 20px · padding 20px                           */
+.map-full-event__participants {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-5);   /* 20px — between organizers + participants */
+  padding:        var(--space-5);   /* 20px */
+}
+
+/* Member section (organizers OR participants) — column · gap 28px */
+.map-full-event__members-section {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-7);   /* 28px — Figma 1385:4747 */
+}
+
+/* Section title — Unbounded 400 20px 120% */
+.map-full-event__section-title {
+  font-family: var(--font-heading);
+  font-size:   var(--text-xl);             /* 20px                         */
+  font-weight: var(--font-weight-regular); /* 400                          */
+  line-height: var(--line-height-tight);   /* 120%                         */
+  color:       var(--color-text);
+  margin:      0;
+}
+
+.map-full-event__section-title--center {
+  text-align: center;
+}
+
+/* Participants header — row · space-between · align-center */
+.map-full-event__participants-header {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+}
+
+/* Count chip — "7/9" · rounded pill · #BBB1FF bg */
+.map-full-event__count-chip {
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  border-radius:    var(--radius-count-chip);      /* 27px                 */
+  background-color: var(--color-purple-pagination);/* #BBB1FF              */
+  padding:          var(--space-1-5) var(--space-3); /* 6px 12px           */
+  font-family:      var(--font-body);
+  font-size:        var(--text-sm);                /* 14px                 */
+  font-weight:      var(--font-weight-semibold);   /* 600                  */
+  line-height:      var(--line-height-label);      /* 100%                 */
+  color:            var(--color-text);
+  white-space:      nowrap;
+}
+
+/* Members list — column · gap 28px */
+.map-full-event__members-list {
+  list-style:     none;
+  margin:         0;
+  padding:        0;
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-7);   /* 28px between member rows */
+}
+
+/* Participants list variant — extra bottom padding */
+.map-full-event__members-list--participants {
+  padding-bottom: var(--space-10);  /* 40px — space before show-more btn  */
+}
+
+/* Member row — row · align-center · gap 12px */
+.map-full-event__member-row {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-3);   /* 12px */
+}
+
+/* Avatar wrapper — 60×60 · position:relative for badge overlay */
+.map-full-event__avatar-wrap {
+  position:  relative;
+  width:     var(--size-avatar-lg);   /* 60px */
+  height:    var(--size-avatar-lg);   /* 60px */
+  flex-shrink: 0;
+}
+
+/* Avatar image — circle · cover */
+.map-full-event__avatar {
+  width:         100%;
+  height:        100%;
+  border-radius: 50%;
+  object-fit:    cover;
+  display:       block;
+}
+
+/* Badge chip overlaid on top-right corner of avatar
+   14×14px · #BBB1FF bg · absolute · tiny text/icon
+   Figma: numbered (1, 3, 7) or hashtag variant        */
+.map-full-event__avatar-badge {
+  position:         absolute;
+  top:              0;
+  right:            0;
+  width:            var(--size-avatar-badge);          /* 14px             */
+  height:           var(--size-avatar-badge);          /* 14px             */
+  border-radius:    var(--radius-pill);
+  background-color: var(--color-purple-pagination);    /* #BBB1FF          */
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  font-family:      var(--font-body);
+  font-size:        0.5rem;                            /* 8px — tiny label */
+  font-weight:      var(--font-weight-bold);           /* 700              */
+  line-height:      var(--line-height-label);
+  color:            var(--color-text);
+}
+
+/* Hashtag badge variant — contains an <img> icon */
+.map-full-event__avatar-badge--hash img {
+  width:   var(--space-2);   /* 8px */
+  height:  var(--space-2);   /* 8px */
+  display: block;
+}
+
+/* Member info — column */
+.map-full-event__member-info {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-1);   /* 4px */
+  min-width:      0;
+}
+
+/* Member name — Manrope 500 14px */
+.map-full-event__member-name {
+  font-family:   var(--font-body);
+  font-size:     var(--text-sm);            /* 14px                       */
+  font-weight:   var(--font-weight-medium); /* 500                        */
+  line-height:   var(--line-height-tight);  /* 120%                       */
+  color:         var(--color-text);
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+}
+
+/* "Show more" text button — centered · #8A38F5 */
+.map-full-event__show-more {
+  font-family:  var(--font-body);
+  font-size:    var(--text-sm);            /* 14px                        */
+  font-weight:  var(--font-weight-semibold); /* 600                       */
+  color:        var(--color-purple-vivid); /* #8A38F5                     */
+  background:   transparent;
+  border:       none;
+  padding:      var(--space-3) 0;          /* 12px vertical only          */
+  cursor:       pointer;
+  text-align:   center;
+  width:        100%;
+  transition:   color var(--transition-fast);
+}
+.map-full-event__show-more:hover {
+  color: var(--color-purple-primary);      /* #A978FF                     */
+}
+
+/* Unregistered note — Manrope 500 14px 120% · rgba(13,14,15,0.7) */
+.map-full-event__unregistered {
+  font-family: var(--font-body);
+  font-size:   var(--text-sm);            /* 14px                         */
+  font-weight: var(--font-weight-medium); /* 500                          */
+  line-height: var(--line-height-tight);  /* 120%                         */
+  color:       var(--color-text-dim);     /* rgba(13,14,15,0.70)          */
+  margin:      0;
+  text-align:  center;
+}
+
+/* ── f) Requirements block (Figma 1127:15918) ───────────────
+   Outer: column · gap 10px · padding 20px
+   Inner card (.req-list): r 20px · padding 20px 20px 40px    */
+.map-full-event__requirements {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-2-5);   /* 10px */
+  padding:        var(--space-5);     /* 20px */
+}
+
+/* Inner card — rounded container (Figma r:20px) */
+.map-full-event__req-list {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-10);     /* 40px — between header and items  */
+  padding:        var(--space-5) var(--space-5) var(--space-10);  /* 20px 20px 40px */
+  border-radius:  var(--radius-badge); /* 20px                             */
+}
+
+/* Requirements header — column · gap 4px */
+.map-full-event__req-header {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-1);    /* 4px */
+}
+
+/* Requirements description — Manrope Light 300 16px 120% */
+.map-full-event__req-desc {
+  font-family: var(--font-body);
+  font-size:   var(--text-base);           /* 16px                        */
+  font-weight: 300;                        /* Light — no token; Manrope 300 */
+  line-height: var(--line-height-tight);   /* 120%                        */
+  color:       var(--color-text-muted);    /* #827C7C                     */
+  margin:      0;
+}
+
+/* Requirements items list — column · gap 16px */
+.map-full-event__req-items {
+  list-style:     none;
+  margin:         0;
+  padding:        0;
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-4);   /* 16px between checklist items       */
+}
+
+/* Requirement item — row · gap 10px · Manrope 500 16px 120% */
+.map-full-event__req-item {
+  display:     flex;
+  align-items: flex-start;
+  gap:         var(--space-2-5);         /* 10px                          */
+  font-family: var(--font-body);
+  font-size:   var(--text-base);         /* 16px                          */
+  font-weight: var(--font-weight-medium); /* 500                          */
+  line-height: var(--line-height-tight); /* 120%                          */
+  color:       var(--color-text);
+}
+
+.map-full-event__req-item img {
+  flex-shrink: 0;
+}
+
+/* ── g) Event Actions (Figma 1127:15985) ─────────────────────
+   Column · center · gap 20px · padding 20px 0 40px           */
+.map-full-event__actions {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-5);   /* 20px */
+  padding:        var(--space-5) 0 var(--space-10);  /* 20px 0 40px */
+  width:          100%;
+}
+
+/* Photo buttons row — two equal buttons · gap 20px · inset 20px */
+.map-full-event__photo-btns {
+  display:         flex;
+  gap:             var(--space-5);   /* 20px */
+  padding-inline:  var(--space-5);   /* 20px — keeps buttons inset         */
+  width:           100%;
+}
+
+/* Photo button — equal width */
+.map-full-event__photo-btn {
+  flex:         1;
+  font-family:  var(--font-body);
+  font-size:    var(--text-sm);            /* 14px                         */
+  font-weight:  var(--font-weight-medium); /* 500                          */
+}
+
+/* Disabled photo button — muted text + border */
+.map-full-event__photo-btn--disabled {
+  color:        var(--color-disabled-fg);  /* #A9B2B7                      */
+  border-color: var(--color-disabled-fg);
+  cursor:       not-allowed;
+}
+.map-full-event__photo-btn--disabled:hover,
+.map-full-event__photo-btn--disabled:active,
+.map-full-event__photo-btn--disabled:focus-visible {
+  background-color: transparent;
+  color:            var(--color-disabled-fg);
+  border-color:     var(--color-disabled-fg);
+}
+
+/* Extra image wrap — padding 0 20px (Figma layout_Z9UZ6Q) */
+.map-full-event__extra-wrap {
+  padding: 0 var(--space-5);   /* 20px horizontal inset */
+  width:   100%;
+}
+
+/* Extra image — h 250px · r 20px · cover */
+.map-full-event__extra-img {
+  display:       block;
+  width:         100%;
+  height:        var(--size-extra-img-h);  /* 250px — Figma layout_4M7O6P  */
+  object-fit:    cover;
+  border-radius: var(--radius-badge);      /* 20px                         */
+}
+
+/* Photo pagination — row · center · gap 10px (Figma 1127:15988) */
+.map-full-event__pagination {
+  display:         flex;
+  justify-content: center;
+  align-items:     center;
+  gap:             var(--space-2-5);   /* 10px */
+}
+
+.map-full-event__page-dot {
+  width:            0.5rem;                          /*  8px                */
+  height:           0.5rem;                          /*  8px                */
+  border-radius:    var(--radius-pagination);        /* 19px — fully rounded */
+  background-color: var(--color-purple-pagination);  /* #BBB1FF             */
+  flex-shrink:      0;
+}
+
+.map-full-event__page-dot--active {
+  width: 1.875rem;   /* 30px — active dot wider */
+}

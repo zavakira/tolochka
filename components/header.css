@@ -1,0 +1,253 @@
+/* ============================================================
+   Component: Site Header
+   Figma node 1905-5090 — Header section
+   Padding: 32px top · 20px horizontal · 20px bottom
+   Layout: row · logo left · CTA right · gap 10px
+   ============================================================ */
+
+.site-header {
+  /* Figma 1261:4681 layout_IDUSCX — row, space-between, center, align-self:stretch */
+  display:         flex;
+  flex-direction:  row;
+  justify-content: space-between;
+  align-items:     center;
+  align-self:      stretch;
+  flex-shrink:     0;                                              /* never squish in flex column parents */
+  padding:         var(--space-8) var(--space-5) var(--space-5);   /* 32px 20px 20px */
+  background-color: var(--color-bg);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* ── Logo ───────────────────────────────────────────────────── */
+/* Unbounded · Bold 700 · 16px · black · no underline          */
+.header-logo {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-label);
+  letter-spacing: var(--letter-spacing-normal);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+.header-logo:hover { opacity: 0.75; }
+
+/* ── Nav ────────────────────────────────────────────────────── */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);                                    /* 10px */
+}
+
+/* ── Shared button base ─────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-label);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-normal);
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: var(--radius-pill);                        /* 100px */
+  transition: background-color var(--transition-fast),
+              color             var(--transition-fast),
+              border-color      var(--transition-fast);
+  cursor: pointer;
+}
+
+/* Outline variant — 1.5px border · transparent bg */
+.btn--outline {
+  font-size: var(--text-xs);                                /* 12px */
+  padding: var(--space-2) var(--space-3);                   /* 8px 12px */
+  color: var(--color-text);
+  background-color: transparent;
+  border: 1.5px solid var(--color-border);
+}
+/* State layer interactions — Figma node 1075:1557
+   Token names: Action/quantery/black/<state> per Figma variable panel */
+.btn--outline:hover {
+  background-color: var(--Action-quantery-black-hover, rgba(13, 14, 15, 0.10));
+}
+.btn--outline:active {
+  background-color: var(--Action-quantery-black-pressed, rgba(13, 14, 15, 0.20));
+}
+.btn--outline:focus-visible {
+  background-color: var(--Action-quantery-black-focused, rgba(13, 14, 15, 0.05));
+  outline: 2px solid var(--color-border);
+  outline-offset: 2px;
+}
+.btn--outline[disabled],
+.btn--outline:disabled {
+  background-color: var(--color-disabled-bg);              /* #CDD2D4 */
+  color:            var(--color-disabled-fg);              /* #A9B2B7 */
+  border-color:     var(--color-disabled-bg);
+  cursor:           not-allowed;
+  pointer-events:   none;
+}
+
+/* Primary variant — purple fill · white label */
+.btn--primary {
+  font-size: var(--text-sm);                                /* 14px */
+  padding: var(--space-2-5) var(--space-5);                 /* 10px 20px */
+  color: var(--color-white);
+  background-color: var(--color-brand);
+  border: 1.5px solid var(--color-brand);
+}
+.btn--primary:hover {
+  background-color: var(--color-purple-accent);
+  border-color: var(--color-purple-accent);
+}
+
+/* ── Header primary button override — Figma node 1905:5090 ──
+   "button primary" in header context differs from the hero/events
+   CTA: smaller font, tighter padding, 24px radius, no stroke.
+   Scoped to .header-nav so hero and event buttons are unaffected. */
+.header-nav .btn--primary {
+  font-size:        var(--text-xs);                         /* 12px */
+  padding:          var(--space-2) var(--space-4);          /* 8px 16px */
+  border-radius:    var(--radius-btn-toolbar);              /* 32px — Figma 1593:14353 */
+  border:           none;
+  gap:              var(--space-2);                         /* 8px */
+  background-color: var(--color-brand);                     /* #A978FF — Figma 1905:5090 fill_5IA4DT */
+}
+.header-nav .btn--primary:hover {
+  background-color: var(--color-purple-accent);
+  border: none;
+}
+
+/* Burger menu button — pill shape matching Figma node 1510:13629
+   mode: row · center · gap 8px · padding 4px 12px · h 28px
+   border-radius: 41px (same oval family as filter/map buttons)
+   Overrides the --outline 8px padding and the base 100px border-radius */
+.btn--menu {
+  height:        var(--size-btn-burger);                    /* 28px */
+  padding:       var(--space-1) var(--space-3);             /* 4px 12px */
+  gap:           var(--space-2);                            /* 8px */
+  border-radius: var(--radius-btn-toolbar);                 /* 32px — Figma 1593:14354 */
+  flex-shrink:   0;
+}
+.btn--menu svg,
+.btn--menu img {
+  display:    block;
+  flex-shrink: 0;
+  width:  1.25rem;                                          /* 20px — Figma icon size */
+  height: 1.25rem;
+}
+
+/* ── Burger button icon swap ────────────────────────────────
+   Icons are toggled exclusively by JavaScript (inline style).
+   The close SVG starts with style="display:none" in the HTML.
+   .btn--menu svg { display:block } would override a class-only
+   rule, so JS inline styles are used to guarantee the swap.    */
+
+/* ── Nav dropdown (Figma 1929:5965) ─────────────────────────
+   Positioned absolute at header bottom, right-aligned.
+   The sticky header (position:sticky) is the containing block
+   so top:100% places the panel flush with the header's bottom edge. */
+.header-nav-dropdown {
+  display:          none;
+  position:         absolute;
+  top:              100%;
+  right:            0;
+  background-color: var(--color-white);
+  box-shadow:       var(--shadow-nav-dropdown);
+  border-radius:    0 0 var(--radius-badge) var(--radius-badge); /* 0 0 20px 20px */
+  padding:          0 var(--space-2-5);                           /* 0 10px — Figma layout_WGF4MT */
+  z-index:          var(--z-sticky);
+  transform-origin: top right;
+}
+
+.header-nav-dropdown--open {
+  display:   flex;
+  animation: nav-dropdown-expand 220ms ease-out forwards;
+}
+
+.header-nav-dropdown--closing {
+  display:   flex;
+  animation: nav-dropdown-collapse 180ms ease-in forwards;
+}
+
+@keyframes nav-dropdown-expand {
+  from { opacity: 0; transform: translateY(-6px) scaleY(0.88); }
+  to   { opacity: 1; transform: translateY(0)    scaleY(1);    }
+}
+
+@keyframes nav-dropdown-collapse {
+  from { opacity: 1; transform: translateY(0)    scaleY(1);    }
+  to   { opacity: 0; transform: translateY(-6px) scaleY(0.88); }
+}
+
+/* Links column — right-aligned · gap 16px · 197px wide (Figma layout_LB7DVV) */
+.header-nav-dropdown__list {
+  display:        flex;
+  flex-direction: column;
+  align-items:    flex-end;
+  gap:            var(--space-4);   /* 16px */
+  width:          12.3125rem;       /* 197px */
+  padding:        var(--space-4) 0; /* 16px vertical breathing room */
+}
+
+/* Link — label-lg: Manrope SemiBold 24px · 120% · #0D0E0F
+   State-layer: padding 8px 16px · radius 32px (Figma layout_I2I6UX) */
+.header-nav-dropdown__link {
+  font-family:     var(--font-body);
+  font-size:       var(--text-2xl);              /* 24px */
+  font-weight:     var(--font-weight-semibold);  /* 600  */
+  line-height:     var(--line-height-tight);     /* 120% */
+  color:           var(--color-text);            /* #0D0E0F */
+  text-decoration: none;
+  text-transform:  none;
+  letter-spacing:  normal;
+  padding:         var(--space-2) var(--space-4); /* 8px 16px */
+  border-radius:   var(--radius-btn-toolbar);     /* 32px */
+  transition:      background-color var(--transition-fast);
+  white-space:     nowrap;
+}
+.header-nav-dropdown__link:hover {
+  background-color: var(--Action-quantery-black-hover);
+}
+.header-nav-dropdown__link:active {
+  background-color: var(--Action-quantery-black-pressed);
+}
+.header-nav-dropdown__link:focus-visible {
+  background-color: var(--Action-quantery-black-focused);
+  outline: 2px solid var(--color-border);
+  outline-offset: 2px;
+}
+
+/* ── Circle CTA button ──────────────────────────────────────
+   Figma node 949:12087 — CTA button
+   102 × 102px · border-radius 100px → full circle
+   2px dark stroke (#0D0E0F) · transparent bg · arrow SVG inside
+   Usage: <a class="btn btn--circle" href="…">
+            <img src="assets/images/icons/icon-arrow-cta.svg" alt="" aria-hidden="true">
+          </a>
+   ─────────────────────────────────────────────────────────── */
+.btn--circle {
+  width:         var(--size-btn-circle);    /* 102px */
+  height:        var(--size-btn-circle);    /* 102px */
+  border-radius: var(--radius-pill);        /* 100px ≥ 51px → perfect circle */
+  border:        2px solid var(--color-border); /* #0D0E0F */
+  background:    transparent;
+  padding:       var(--space-2-5);          /* 10px */
+  gap:           var(--space-2-5);          /* 10px */
+  flex-shrink:   0;
+  color:         var(--color-text);
+}
+.btn--circle:hover {
+  background-color: var(--color-text);
+  border-color:     var(--color-text);
+  color:            var(--color-white);
+}
+.btn--circle img,
+.btn--circle svg {
+  display:    block;
+  flex-shrink: 0;
+}

@@ -1,0 +1,162 @@
+/* ============================================================
+   Component: Site Footer
+   Figma node 1593:16574 — Footer
+   background: #9251FB (--color-purple-accent)
+   padding: 40px 20px 60px · column · gap 20px
+   ============================================================ */
+
+/* ── Footer wrapper ──────────────────────────────────────────
+   Purple bg · column · gap 20px · padding 40px 20px 60px     */
+.site-footer {
+  background-color: var(--color-purple-accent); /* #9251FB */
+  padding: var(--space-10) var(--space-5) var(--space-15); /* 40px 20px 60px */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);                          /* 20px — Figma layout_V56MBR */
+  max-width: var(--viewport-mobile);
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* ── Footer Nav row ──────────────────────────────────────────
+   Figma node 1593:16575 — row · space-between · align center  */
+.footer-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;                          /* Figma: alignItems center */
+}
+
+/* ── Nav links column ────────────────────────────────────────
+   Figma node 1593:16576 — Footer Nav Links · column · gap 4px */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);                          /* 4px */
+}
+
+/* Nav link — State-layer style
+   Figma node 1593:16577–81 — State-layer · size=small
+   Manrope SemiBold 600 · 14px · 100% lh · #FFFFFF
+   padding: 4px 16px · border-radius: 32px
+   Hover: --Action-quantery-black-hover overlay   */
+.footer-links__link {
+  font-family:     var(--font-body);
+  font-size:       var(--text-sm);              /* 14px — label-sm */
+  font-weight:     var(--font-weight-semibold); /* 600 */
+  line-height:     var(--line-height-label);    /* 100% */
+  color:           var(--color-white);
+  text-decoration: none;
+  padding:         var(--space-1) var(--space-4); /* 4px 16px — State-layer layout_ZBS00X */
+  border-radius:   var(--radius-btn-toolbar);   /* 32px */
+  transition:      background-color var(--transition-fast);
+}
+
+.footer-links__link:hover {
+  background-color: var(--Action-quantery-black-hover, rgba(13, 14, 15, 0.10));
+  opacity: 1;                                   /* reset any inherited opacity */
+}
+
+/* ── Footer Brand (logo only) ────────────────────────────────
+   Figma node 1593:16582 — Footer Logo · column · align end    */
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Logo text
+   Figma node 1593:16584 — Unbounded Bold 700 · 24px · #FFFFFF */
+.footer-logo {
+  font-family:     var(--font-heading);
+  font-size:       var(--text-2xl);             /* 24px */
+  font-weight:     var(--font-weight-bold);     /* 700 */
+  line-height:     var(--line-height-tight);    /* 120% */
+  color:           var(--color-white);
+  text-decoration: none;
+  padding:         var(--space-1);              /* 4px — Logo ipsum layout_I1652I */
+  transition:      opacity var(--transition-fast);
+}
+
+.footer-logo:hover { opacity: 0.85; }
+
+/* ── Footer Bottom ───────────────────────────────────────────
+   Figma node 1593:16585 — column · align center · gap 20px    */
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);                          /* 20px */
+}
+
+/* ── Social icon buttons ─────────────────────────────────────
+   Figma node 1593:16586 — Social_Links · row
+   Icon button - standart · 40×40px · Round · Small            */
+.footer-social {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;                                       /* buttons sit flush per Figma layout_FTXBHG */
+}
+
+/* Social icon button — 40×40px circle
+   Figma component 1156:23083 — Type=Round, Size=Small
+   Content frame: 40×40px · border-radius 100px               */
+.footer-social__link {
+  width:           2.5rem;                      /* 40px — layout_AS63NH */
+  height:          2.5rem;
+  border-radius:   50%;                         /* 100px — Content borderRadius */
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  color:           var(--color-white);
+  text-decoration: none;
+  transition:      background-color var(--transition-fast);
+}
+
+.footer-social__link:hover {
+  background-color: var(--Action-quantery-black-hover, rgba(13, 14, 15, 0.10));
+}
+
+.footer-social__link img {
+  width:  1.5rem;                               /* 24px */
+  height: 1.5rem;
+  display: block;
+}
+
+/* ── Legal info ──────────────────────────────────────────────
+   Figma node 1593:16590 — Legal Info · column · center · gap 4px */
+.footer-legal {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-1);               /* 4px */
+}
+
+/* Legal links row
+   Figma node 1593:16591 — Legal Links · row · gap 14px        */
+.footer-legal__links {
+  display:        flex;
+  flex-direction: row;
+  gap:            0.875rem;                     /* 14px — layout_2GR281 */
+}
+
+/* Legal link & copyright text
+   Figma nodes 1593:16592–94 — State-layer · size=xsmall
+   Manrope SemiBold 600 · 12px · 100% lh · #FFFFFF
+   padding: 4px 16px (inherited from State-layer layout_ZBS00X) */
+.footer-bottom__item {
+  font-family:     var(--font-body);
+  font-size:       var(--text-xs);              /* 12px — label-xs */
+  font-weight:     var(--font-weight-semibold); /* 600 */
+  line-height:     var(--line-height-label);    /* 100% */
+  color:           var(--color-white);
+  text-decoration: none;
+  padding:         var(--space-1) var(--space-4); /* 4px 16px — State-layer xsmall */
+  border-radius:   var(--radius-btn-toolbar);   /* 32px */
+  transition:      background-color var(--transition-fast);
+}
+
+a.footer-bottom__item:hover {
+  background-color: var(--Action-quantery-black-hover, rgba(13, 14, 15, 0.10));
+}

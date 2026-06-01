@@ -1,0 +1,207 @@
+/* ============================================================
+   Component: CTA Banner Section
+   Figma node 1261:4811 — CTA banner
+   Outer: column · padding 60px 0
+   Inner banner: green #BAD342 · column · center
+                 padding 40px 20px 140px · gap 40px
+   ============================================================ */
+
+/* ── Outer section wrapper ───────────────────────────────────
+   Figma node 1261:4811 — CTA banner (outer)
+   column · gap 10px · padding 60px 0                         */
+.cta {
+  position: relative;                      /* anchor for .cta-tags absolute layer */
+  background-color: var(--color-bg);
+  padding: var(--space-15) 0;              /* 60px 0 */
+}
+
+/* ── Green banner block ──────────────────────────────────────
+   Figma node 1261:4812 — Banner
+   fill #BAD342 · column · center · gap 40px
+   padding: 40px 20px 140px (extra bottom for floating tags)  */
+.cta-banner {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-accent);          /* #BAD342 */
+  padding: var(--space-10) var(--space-5) 8.75rem;/* 40px 20px 140px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-10);                           /* 40px */
+  max-width: var(--viewport-mobile);
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* ── Hobby tags layer ────────────────────────────────────────
+   Figma node 1268:4691 — Promo container
+   375×623px · absolute · top 59.55px
+   Contains 8 hobby tags at absolute positions               */
+.cta-tags {
+  position: absolute;
+  top: 3.722rem;                          /* 59.55px */
+  left: 0;
+  width: 100%;
+  height: 38.9375rem;                     /* 623px */
+  pointer-events: none;
+  z-index: var(--z-raised);              /* float above .cta-banner (position:relative, same context) */
+}
+
+/* Hobby tag base ─────────────────────────────────────────────
+   Figma: radius 40px · padding 4px 10px · gap 10px
+   Manrope Medium 500 · 12px                                  */
+.hobby-tag {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2-5);       /* 4px 10px */
+  border-radius: var(--radius-card);              /* 40px */
+  font-family: var(--font-body);
+  font-size: var(--text-xs);                      /* 12px */
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-label);
+  white-space: nowrap;
+}
+
+/* Default state — transparent bg · no border · dark text
+   Figma: ComponentId 1045:14716 (State=Default) — no strokes */
+.hobby-tag--default {
+  background-color: transparent;
+  color: var(--color-text);
+  border: none;
+}
+
+/* Hover state — semi-transparent overlay
+   Figma: ComponentId 1045:14716 (State=Hover) — 20% black tint */
+.hobby-tag:hover {
+  background-color: rgba(0, 0, 0, 0.20);
+}
+
+/* Pressed state — dark bg · white text
+   Figma: ComponentId 1045:14720 (State=pressed)             */
+.hobby-tag--pressed {
+  background-color: var(--color-text);            /* #0D0E0F */
+  color: var(--color-white);
+  border: none;
+}
+
+/* Individual tag positions ───────────────────────────────────
+   Derived from Figma promo container coords (px → % of 375×623)
+   x%  = x_px / 375 × 100   |   y%  = y_px / 623 × 100     */
+.cta-tag--mama      { left: 70.1%; top: 81.7%; } /* x=263, y=509 */
+.cta-tag--muzikant  { left:  3.7%; top: 87.6%; } /* x=14,  y=546 */
+.cta-tag--student   { left:  8.5%; top: 74.8%; } /* x=32,  y=466 (shifted 10px left) */
+.cta-tag--kavoman   { left:  3.7%; top: 46.2%; } /* x=14,  y=288 */
+.cta-tag--kulinar   { left: 67.5%; top: 40.5%; } /* x=253, y=252 */
+.cta-tag--bilky     { left: 48.0%; top: 94.4%; } /* x=180, y=588 */
+.cta-tag--nastolky  { left:  6.4%; top: 13.6%; } /* x=24,  y=85  */
+.cta-tag--geimer    { left: 67.5%; top:  2.1%; } /* x=253, y=13  */
+
+/* ── Promo image — full-bleed ────────────────────────────────
+   Figma node 1261:4813 / 1611:4951 — Promo Image 1
+   375×247px · bleeds past banner's 20px side padding
+   negative margin counteracts padding to achieve full width  */
+.cta-promo {
+  width: calc(100% + 2 * var(--space-5));   /* 100% + 40px = 375px */
+  margin-inline: calc(-1 * var(--space-5)); /* −20px each side */
+  height: 15.4375rem;                       /* 247px */
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.cta-promo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Info block ──────────────────────────────────────────────
+   Figma node 1261:4819 — Info
+   column · center · gap 28px (layout_7J18DB)                */
+.cta-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;                           /* 28px — Figma layout_7J18DB */
+  width: 100%;
+  position: relative;                     /* above cta-tags layer */
+  z-index: var(--z-raised);
+}
+
+/* Heading container — column · center · gap 12px
+   Figma node 1261:4819 — Heading                            */
+.cta-heading-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);                    /* 12px */
+  width: 100%;                            /* Figma alignSelf: stretch */
+}
+
+/* Banner heading
+   Figma node 1261:4820 — Banner heading
+   Unbounded · Medium 500 · 24px · 120% · UPPER · center     */
+.cta-heading {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);             /* 24px */
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);  /* 120% */
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-text);
+}
+
+/* ── "ДОЄДНАТИСЯ" join button (Figma 1837:14148) ────────────
+   outline · r 32px · 12px 24px · SemiBold 16px UPPER #0D0E0F */
+.cta-join-btn {
+  display:          inline-flex;
+  align-items:      center;
+  justify-content:  center;
+  padding:          var(--space-3) var(--space-6);   /* 12px 24px */
+  border:           1.5px solid var(--color-text);   /* #0D0E0F */
+  border-radius:    var(--radius-btn-toolbar);       /* 32px */
+  background-color: transparent;
+  font-family:      var(--font-body);
+  font-size:        var(--text-base);                /* 16px */
+  font-weight:      var(--font-weight-semibold);     /* 600 */
+  line-height:      var(--line-height-label);        /* 100% */
+  text-transform:   uppercase;
+  letter-spacing:   var(--letter-spacing-normal);
+  color:            var(--color-text);               /* #0D0E0F */
+  text-decoration:  none;
+  cursor:           pointer;
+  flex-shrink:      0;
+  transition:       background-color var(--transition-fast),
+                    color             var(--transition-fast);
+}
+.cta-join-btn:hover {
+  background-color: var(--color-text);
+  color:            var(--color-white);
+}
+
+/* CTA icon button — kept for reference but no longer used in HTML */
+.cta-icon-btn {
+  width: var(--size-cta-icon-btn);        /* 56px */
+  height: var(--size-cta-icon-btn);       /* 56px */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-btn-event); /* 32px */
+  background-color: transparent;
+  color: var(--color-text);
+  text-decoration: none;
+  box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.25);
+  transition: background-color var(--transition-fast),
+              color             var(--transition-fast);
+}
+.cta-icon-btn:hover {
+  background-color: var(--color-text);
+  color: var(--color-white);
+}
+.cta-icon-btn img {
+  width: 1.75rem;                         /* 28px — Figma icon size */
+  height: 1.75rem;
+}
